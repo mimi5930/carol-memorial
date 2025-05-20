@@ -7,7 +7,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger
 } from '../components/ui/navigation-menu'
-import { headerLilacImg } from '~/assets'
+import { carolHeadshot, headerLilacImg } from '~/assets'
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -23,7 +23,7 @@ export default function Home() {
   return (
     <>
       <div className="flex justify-between w-full px-5 py-2.5 z-30 bg-lilac">
-        <h1 className="font-ephesis text-6xl font-bold  text-shadow-sm">
+        <h1 className="font-ephesis text-6xl font-bold text-orange-200 text-shadow-md text-shadow-black">
           Carol Ann Trainor
         </h1>
         <NavigationMenu>
@@ -82,12 +82,37 @@ export default function Home() {
           </NavigationMenuList>
         </NavigationMenu>
       </div>
-      <header className="h-[56rem]">
+      <header className="h-[56rem] relative">
         <img
           src={headerLilacImg}
           alt=""
           className="w-full h-full object-cover object-top border-b-8 border-amber-400"
         />
+        <div className="absolute bottom-0 left-0 h-full w-full flex flex-col justify-center items-center">
+          <div className="flex flex-col justify-center items-center rounded-xl bg-accent/55 p-8 shadow-lg">
+            <div className="flex justify-center items-center gap-8">
+              <h2 className="font-ephesis text-6xl font-extrabold text-orange-200 text-shadow-md text-shadow-black">
+                1966
+              </h2>
+              <img
+                src={carolHeadshot}
+                alt="A photo of Carol Trainor with her bright pink hair in front of her beloved lilac bush at her house"
+                className="h-[30rem] ring-orange-400 ring-8 rounded-xl shadow-xl shadow-black"
+              />
+              <h2 className="font-ephesis text-6xl font-extrabold text-orange-200 text-shadow-md text-shadow-black">
+                2025
+              </h2>
+            </div>
+            <div className="flex flex-col items-center py-5 gap-1.5">
+              <h2 className="font-ephesis text-5xl font-extrabold text-orange-200 text-shadow-md text-shadow-black">
+                The world is in your hands, now use it.
+              </h2>
+              <h2 className="font-ephesis text-4xl font-extrabold text-orange-200 text-shadow-md text-shadow-black">
+                ~ Phil Collins
+              </h2>
+            </div>
+          </div>
+        </div>
       </header>
     </>
   )
