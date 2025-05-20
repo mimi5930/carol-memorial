@@ -17,6 +17,7 @@ body {
   /* @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   } */
+  @apply bg-orange-50;
 }
 
 @theme inline {
