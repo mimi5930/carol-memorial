@@ -7,10 +7,10 @@ import {
   ScrollRestoration
 } from 'react-router'
 
-import type { Route } from './+types/root'
+import type { Route as RouteType } from './+types/root'
 import './app.css'
 
-export const links: Route.LinksFunction = () => [
+export const links: RouteType.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
   {
     rel: 'preconnect',
@@ -50,7 +50,7 @@ export function HydrateFallback() {
   return <div>loading...</div>
 }
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: RouteType.ErrorBoundaryProps) {
   let message = 'Oops!'
   let details = 'An unexpected error occurred.'
   let stack: string | undefined
