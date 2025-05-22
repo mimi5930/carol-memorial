@@ -1,4 +1,3 @@
-import { Separator } from '@radix-ui/react-separator'
 import { Button } from '~/components/ui/button'
 
 export default function about() {
@@ -76,7 +75,10 @@ export default function about() {
           </div>
         </div>
       </article> */}
-      <article className="flex flex-col w-7xl bg-slate-50 mt-8 rounded-md shadow-md p-8 gap-8 text-lg">
+      <article
+        id="obituary"
+        className="flex flex-col w-7xl bg-slate-50 mt-8 rounded-md shadow-md p-8 mb-8 gap-8 text-lg"
+      >
         <h2 className="font-ephesis text-7xl font-extrabold py-12 self-center">
           Carol's Obituary
         </h2>

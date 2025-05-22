@@ -228,7 +228,9 @@ export default function Home() {
                 accompanist of the Hudson Middle School Choirs for the past
                 several years...
               </p>
-              <Button>Go to full Obituary</Button>
+              <Button>
+                <Link to="/about#obituary">Go to full Obituary</Link>
+              </Button>
             </div>
           </div>
           <div className="w-3xl bg-slate-100 shadow-md text-lg/8 p-12 gap-8 flex flex-col h-max">
@@ -272,63 +274,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <footer className="h-[25rem] bg-slate-500 flex flex-col justify-center items-center text-base text-orange-50">
-        <div>
-          <h2 className="font-bold text-2xl pb-3">Carol Ann Trainor</h2>
-          <div className="flex gap-32">
-            <div className="flex flex-col gap-2">
-              <h3 className="font-bold text-lg">ABOUT</h3>
-              <Link
-                to="/"
-                className="text-sm hover:underline underline-offset-3"
-              >
-                Carol's Life
-              </Link>
-              <Link
-                to="/"
-                className="text-sm hover:underline underline-offset-3"
-              >
-                Memorial Fund
-              </Link>
-              <h3 className="font-bold">LINKS</h3>
-              <Link
-                to="/"
-                className="text-sm hover:underline underline-offset-3"
-              >
-                Articles
-              </Link>
-              <Link
-                to="/"
-                className="text-sm hover:underline underline-offset-3"
-              >
-                Urban Olive and Vine
-              </Link>
-            </div>
-            <div className="flex flex-col gap-2">
-              <h3 className="font-bold">DONATE</h3>
-              <Link
-                to="/"
-                className="text-sm hover:underline underline-offset-3"
-              >
-                Paypal
-              </Link>
-              <Link
-                to="/"
-                className="text-sm hover:underline underline-offset-3"
-              >
-                Other payments
-              </Link>
-              <Link
-                to="/"
-                className="text-sm hover:underline underline-offset-3"
-              >
-                GALLERY
-              </Link>
-              <h3 className="font-bold">Contact</h3>
-            </div>
-          </div>
-        </div>
-      </footer>
     </>
   )
 }
