@@ -29,7 +29,7 @@ export default function Navbar() {
                   <Link to="/about">Carol's Life</Link>
                 </NavigationMenuLink>
                 <NavigationMenuLink className="hover:bg-lilac/75">
-                  Memorial Fund
+                  <Link to="/memorial">Memorial Fund</Link>
                 </NavigationMenuLink>
               </ul>
             </NavigationMenuContent>
