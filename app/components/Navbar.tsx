@@ -7,6 +7,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger
 } from './ui/navigation-menu'
+import { Separator } from './ui/separator'
 
 export default function Navbar() {
   return (
@@ -39,11 +40,22 @@ export default function Navbar() {
             </NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="w-64">
+                <h2 className="text-sm p-2 pb-0 font-semibold">Articles</h2>
                 <NavigationMenuLink className="hover:bg-lilac/75">
-                  Articles
+                  <a href="https://www.hudsonstarobserver.com/obituaries/carol-ann-trainor/article_170650eb-7da0-5e91-8921-bc94149ea1cb.html">
+                    Star-Observer: Obituary
+                  </a>
                 </NavigationMenuLink>
                 <NavigationMenuLink className="hover:bg-lilac/75">
-                  Urban Olive and Vine
+                  <a href="https://www.hudsonstarobserver.com/obituaries/remembering-carol-trainor-a-community-involved-restaurateur-whose-community-returned-the-favor/article_e13d2854-6b76-4ddb-882c-6eafb8001394.html">
+                    Star-Observer: Remembering Carol
+                  </a>
+                </NavigationMenuLink>
+                <Separator />
+                <NavigationMenuLink className="hover:bg-lilac/75">
+                  <a href="https://urbanoliveandvine.com/">
+                    Urban Olive and Vine
+                  </a>
                 </NavigationMenuLink>
               </ul>
             </NavigationMenuContent>

@@ -14,6 +14,14 @@ import CalendarHeart from '~/components/svg/CalendarHeart'
 import Clock from '~/components/svg/Clock'
 import FacebookIcon from '~/components/svg/FacebookIcon'
 import { Separator } from '~/components/ui/separator'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '~/components/ui/dropdown-menu'
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -112,7 +120,33 @@ export default function Home() {
                         <FacebookIcon />
                       </a>
                     </Button>
-                    <Button>Add to Calendar</Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger>
+                        <Button>Add to Calendar</Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem>
+                          <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&dates=20250620T200000Z%2F20250621T000000Z&details=Carol%20Trainor%20passed%20away%20on%20May%205%2C%202025.%20Visitations%20open%20to%20the%20public%20will%20be%202-6%20PM%20Friday%20June%2020%20and%2011%20AM%20-%203%20PM%20Saturday%20June%2021%20at%20the%20O%E2%80%99Connell%20Family%20Funeral%20Home%20in%20Hudson%2C%20WI.&location=520%2011th%20Street%20South%20Hudson%2C%20WI%2054016&text=Carol%20Trainor%20Visitation">
+                            Google Calendar
+                          </a>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <a href="https://calendar.yahoo.com/?desc=Carol%20Trainor%20passed%20away%20on%20May%205%2C%202025.%20Visitations%20open%20to%20the%20public%20will%20be%202-6%20PM%20Friday%20June%2020%20and%2011%20AM%20-%203%20PM%20Saturday%20June%2021%20at%20the%20O%E2%80%99Connell%20Family%20Funeral%20Home%20in%20Hudson%2C%20WI.&dur=false&et=20250621T000000Z&in_loc=520%2011th%20Street%20South%20Hudson%2C%20WI%2054016&st=20250620T200000Z&title=Carol%20Trainor%20Visitation&v=60">
+                            Yahoo
+                          </a>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <a href="https://outlook.live.com/calendar/0/action/compose?allday=false&body=Carol%20Trainor%20passed%20away%20on%20May%205%2C%202025.%20Visitations%20open%20to%20the%20public%20will%20be%202-6%20PM%20Friday%20June%2020%20and%2011%20AM%20-%203%20PM%20Saturday%20June%2021%20at%20the%20O%E2%80%99Connell%20Family%20Funeral%20Home%20in%20Hudson%2C%20WI.&enddt=2025-06-20T19%3A00%3A00&location=520%2011th%20Street%20South%20Hudson%2C%20WI%2054016&path=%2Fcalendar%2Faction%2Fcompose&rru=addevent&startdt=2025-06-20T15%3A00%3A00&subject=Carol%20Trainor%20Visitation">
+                            Outlook
+                          </a>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <a href="https://calendar.aol.com/?desc=Carol%20Trainor%20passed%20away%20on%20May%205%2C%202025.%20Visitations%20open%20to%20the%20public%20will%20be%202-6%20PM%20Friday%20June%2020%20and%2011%20AM%20-%203%20PM%20Saturday%20June%2021%20at%20the%20O%E2%80%99Connell%20Family%20Funeral%20Home%20in%20Hudson%2C%20WI.&dur=false&et=20250621T000000Z&in_loc=520%2011th%20Street%20South%20Hudson%2C%20WI%2054016&st=20250620T200000Z&title=Carol%20Trainor%20Visitation&v=60">
+                            AOL Calendar
+                          </a>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </div>
                 <div className="bg-lilac p-8 shadow-sm rounded-md flex flex-col gap-1">
@@ -145,7 +179,33 @@ export default function Home() {
                         <FacebookIcon />
                       </a>
                     </Button>
-                    <Button>Add to Calendar</Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger>
+                        <Button>Add to Calendar</Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem>
+                          <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&dates=20250621T170000Z%2F20250621T210000Z&details=Carol%20Trainor%20passed%20away%20on%20May%205%2C%202025.%20Visitations%20open%20to%20the%20public%20will%20be%202-6%20PM%20Friday%20June%2020%20and%2011%20AM%20-%203%20PM%20Saturday%20June%2021%20at%20the%20O%E2%80%99Connell%20Family%20Funeral%20Home%20in%20Hudson%2C%20WI.&location=520%2011th%20Street%20South%20Hudson%2C%20WI%2054016&text=Carol%20Trainor%20Visitation">
+                            Google Calendar
+                          </a>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <a href="https://calendar.yahoo.com/?desc=Carol%20Trainor%20passed%20away%20on%20May%205%2C%202025.%20Visitations%20open%20to%20the%20public%20will%20be%202-6%20PM%20Friday%20June%2020%20and%2011%20AM%20-%203%20PM%20Saturday%20June%2021%20at%20the%20O%E2%80%99Connell%20Family%20Funeral%20Home%20in%20Hudson%2C%20WI.&dur=false&et=20250621T210000Z&in_loc=520%2011th%20Street%20South%20Hudson%2C%20WI%2054016&st=20250621T170000Z&title=Carol%20Trainor%20Visitation&v=60">
+                            Yahoo
+                          </a>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <a href="https://outlook.live.com/calendar/0/action/compose?allday=false&body=Carol%20Trainor%20passed%20away%20on%20May%205%2C%202025.%20Visitations%20open%20to%20the%20public%20will%20be%202-6%20PM%20Friday%20June%2020%20and%2011%20AM%20-%203%20PM%20Saturday%20June%2021%20at%20the%20O%E2%80%99Connell%20Family%20Funeral%20Home%20in%20Hudson%2C%20WI.&enddt=2025-06-21T16%3A00%3A00&location=520%2011th%20Street%20South%20Hudson%2C%20WI%2054016&path=%2Fcalendar%2Faction%2Fcompose&rru=addevent&startdt=2025-06-21T12%3A00%3A00&subject=Carol%20Trainor%20Visitation">
+                            Outlook
+                          </a>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <a href="https://calendar.aol.com/?desc=Carol%20Trainor%20passed%20away%20on%20May%205%2C%202025.%20Visitations%20open%20to%20the%20public%20will%20be%202-6%20PM%20Friday%20June%2020%20and%2011%20AM%20-%203%20PM%20Saturday%20June%2021%20at%20the%20O%E2%80%99Connell%20Family%20Funeral%20Home%20in%20Hudson%2C%20WI.&dur=false&et=20250621T210000Z&in_loc=520%2011th%20Street%20South%20Hudson%2C%20WI%2054016&st=20250621T170000Z&title=Carol%20Trainor%20Visitation&v=60">
+                            AOL Calendar
+                          </a>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </div>
               </div>
@@ -211,70 +271,6 @@ export default function Home() {
             <Button>Contribute</Button>
           </div>
         </section>
-        {/* <section className="p-12 flex flex-col items-center w-7xl gap-6 bg-slate-100 rounded-xl shadow-md text-lg/8">
-          <h2 className="font-ephesis text-7xl font-extrabold py-2">
-            Carol's Life
-          </h2>
-          <p className="self-start">
-            Carol A. Trainor, age 58, of Hudson, Wisconsin, passed away on May
-            5, 2025. Carol was born October 20, 1966 in St. Paul, MN to Richard
-            and Louise (Thompson) Weiher. She married Chad Trainor on September
-            1, 1993 in Milwaukee, WI.
-          </p>
-          <p>
-            Carol was a Hudson native and graduated from Hudson High School in
-            1985 and went on to earn a degree in Applied Mathematics from
-            UW-River Falls. A lifelong lover of music, Carol accompanied her
-            school choirs on piano growing up, served as a pianist for the
-            Hudson United Methodist Church for over a decade, and was the
-            accompanist of the Hudson Middle School Choirs for the past several
-            years. She performed in multiple handbell choirs since her teenage
-            years, including the Weigand Ringers, Alleluia Ringers, and
-            Gospbells with her mother, sister, and several friends.
-          </p>
-          <p>
-            Carol and her husband Chad became the owners of Urban Olive and Vine
-            in 2018. Carol was a fixture in Urban who was always easy to spot
-            with her funky colored hair. She wore many hats in her role,
-            including server, barista, cook, bookkeeper, and community
-            ambassador. Carol's greatest joy and accomplishment at Urban,
-            however, was by far being a mentor to the teens she worked with.
-            From providing a safe space to express themselves, to tutoring them
-            with their math homework, to being someone they could always confide
-            in, she cared for her young employees like family.
-          </p>
-          <p>
-            Carol loved gardening, crocheting, and spending time with her
-            family. She loved living in the same city as her mother, sister, and
-            beloved nieces and nephew. She loved to relax on her patio swing on
-            a hot summer evening and admire her show-stopping garden. She
-            crocheted a blanket and scarf for just about everyone in her family.
-            Above all, Carol dedicated her life to loving and caring for her
-            children and husband, who adored her in return, and she loved
-            nothing more than spending every second she could with her beloved
-            granddaughter.
-          </p>
-          <p>
-            Carol is survived by her loving husband of nearly 32 years, Chad;
-            daughter, Brianna (Matthew Schiessl); son, Morgan (Michael Miller);
-            mother, Louise Weiher; sister Diane (Leif) Hallen; granddaughter,
-            Lydia; nieces and nephew, Mariah, Sarah, Jenna, and Nicholas; and
-            many other loving cousins and relatives. She was preceded in death
-            by her father, Richard Weiher.
-          </p>
-          <p>
-            A visitation open to the public will be 2-6 PM Friday June 20 and 11
-            AM - 3 PM Saturday June 21 at the O’Connell Family Funeral Home in
-            Hudson, WI. In lieu of flowers, donations may be made to the family
-            which will be used to establish a memorial fund by Carol’s family,
-            which will be for the purpose of giving back to the Hudson Area
-            community in her memory.
-          </p>
-          <div className="flex gap-5">
-            <Button variant="secondary">Download Carol's Obituary</Button>
-            <Button>Carol's Memorial Fund</Button>
-          </div>
-        </section> */}
       </main>
       <footer className="h-[25rem] bg-slate-500 flex flex-col justify-center items-center text-base text-orange-50">
         <div>

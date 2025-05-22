@@ -17,7 +17,8 @@ body {
   /* @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   } */
-  @apply bg-orange-50;
+  /* @apply bg-orange-50; */
+  @apply bg-lilac;
 }
 
 @theme inline {
@@ -127,7 +128,7 @@ body {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-  --lilact: #dde9e9;
+  --lilac: #dde9e9;
 }
 
 @layer base {
