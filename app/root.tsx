@@ -9,6 +9,7 @@ import {
 
 import type { Route as RouteType } from './+types/root'
 import './app.css'
+import Navbar from './components/Navbar'
 
 export const links: RouteType.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },

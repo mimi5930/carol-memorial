@@ -10,8 +10,8 @@ import {
 import { carolHeadshot, headerLilacImg } from '~/assets'
 import { Button } from '~/components/ui/button'
 import { Link } from 'react-router'
-import CalendarHeart from '~/components/svg/calendarHeart'
-import Clock from '~/components/svg/clock'
+import CalendarHeart from '~/components/svg/CalendarHeart'
+import Clock from '~/components/svg/Clock'
 import FacebookIcon from '~/components/svg/FacebookIcon'
 import { Separator } from '~/components/ui/separator'
 
@@ -28,68 +28,6 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   return (
     <>
-      <div className="flex justify-between w-full px-5 py-2.5 z-30 bg-lilac">
-        <Link to="/">
-          <h1 className="font-ephesis text-6xl font-bold text-orange-200 text-shadow-md text-shadow-black">
-            Carol Ann Trainor
-          </h1>
-        </Link>
-        <NavigationMenu>
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <NavigationMenuTrigger className="bg-accent/0 hover:bg-accent/25">
-                About
-              </NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="w-64">
-                  <NavigationMenuLink className="hover:bg-lilac/75">
-                    Carol's Life
-                  </NavigationMenuLink>
-                  <NavigationMenuLink className="hover:bg-lilac/75">
-                    Memorial Fund
-                  </NavigationMenuLink>
-                </ul>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuTrigger className="bg-accent/0 hover:bg-accent/25">
-                Links
-              </NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="w-64">
-                  <NavigationMenuLink className="hover:bg-lilac/75">
-                    Articles
-                  </NavigationMenuLink>
-                  <NavigationMenuLink className="hover:bg-lilac/75">
-                    Urban Olive and Vine
-                  </NavigationMenuLink>
-                </ul>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuTrigger className="bg-accent/0 hover:bg-accent/25">
-                Donate
-              </NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="w-64">
-                  <NavigationMenuLink className="hover:bg-lilac/75">
-                    PayPal
-                  </NavigationMenuLink>
-                  <NavigationMenuLink className="hover:bg-lilac/75">
-                    Other payments
-                  </NavigationMenuLink>
-                </ul>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-            <NavigationMenuItem className="px-4 py-2 text-sm font-medium">
-              Gallery
-            </NavigationMenuItem>
-            <NavigationMenuItem className="px-4 py-2 text-sm font-medium">
-              CONTACT
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-      </div>
       <header className="h-[56rem] relative">
         <img
           src={headerLilacImg}
@@ -131,11 +69,12 @@ export default function Home() {
                 A Personal Message from Carol's Family
               </h2>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga,
-                nulla. Minima in mollitia nisi. Eius, nostrum in laborum,
-                repellendus nesciunt dolorem beatae, magnam animi accusantium
-                eaque cupiditate saepe illum. Aperiam repellendus aliquam
-                dolorem neque at illum autem asperiores, corrupti officiis.
+                "Thank you for visiting this memorial site and for taking a
+                moment to honor the memory of Carol. Your presence here means so
+                much to our family. Whether you are a close friend, a relative,
+                or someone who simply wants to pay their respects, we are deeply
+                grateful for your support, love, and shared remembrance during
+                this time."
               </p>
             </div>
             <Separator />
@@ -218,23 +157,58 @@ export default function Home() {
                 Carol A. Trainor, age 58, of Hudson, Wisconsin, passed away on
                 May 5, 2025. Carol was born October 20, 1966 in St. Paul, MN to
                 Richard and Louise (Thompson) Weiher. She married Chad Trainor
-                on September 1, 1993 in Milwaukee, WI...
+                on September 1, 1993 in Milwaukee, WI
+              </p>
+              <p>
+                Carol was a Hudson native and graduated from Hudson High School
+                in 1985 and went on to earn a degree in Applied Mathematics from
+                UW-River Falls. A lifelong lover of music, Carol accompanied her
+                school choirs on piano growing up, served as a pianist for the
+                Hudson United Methodist Church for over a decade, and was the
+                accompanist of the Hudson Middle School Choirs for the past
+                several years...
               </p>
               <Button>Go to full Obituary</Button>
             </div>
           </div>
           <div className="w-3xl bg-slate-100 shadow-md text-lg/8 p-12 gap-8 flex flex-col h-max">
-            <h2 className="text-4xl font-bold pb-4">In Lieu of Flowers</h2>
+            <h2 className="text-4xl font-bold pb-4 text-center">
+              In Lieu of Flowers
+            </h2>
             <p>
-              Carol's family asks for you to please make a donation to Carol's
-              memorial fund.
+              Carol's family asks for you to please make a donation to{' '}
+              <a className="underline">Carol's Memorial Fund.</a>
             </p>
             <p>
-              This fund has been established to extend the love help our family
-              has received to others who may be experiencing such loss or
-              hardships.
+              This fund has been thoughtfully established as a way to extend the
+              love, kindness, and support that our family has been so deeply
+              grateful to receive during difficult times. It is our hope that
+              through this fund, we can offer comfort, assistance, and a sense
+              of solidarity to others who may be going through similar
+              experiences of loss or hardship.
             </p>
-            <Button>Carol's Memorial Fund</Button>
+            <Separator />
+            <p className="text-center text-3xl font-bold">$13,000</p>
+            <p className="text-center text-2xl">
+              Contributed so far by 12 people
+            </p>
+            <Separator />
+            <h3 className="text-2xl font-bold">Recent Contributions</h3>
+            <div className="text-lg flex justify-between">
+              <p>John Doe</p>
+              <p>$20.00</p>
+            </div>
+            <Separator />
+            <div className="text-lg flex justify-between">
+              <p>Anonymous</p>
+              <p>$20.00</p>
+            </div>
+            <Separator />
+            <div className="text-lg flex justify-between">
+              <p>Anonymous</p>
+              <p>$20.00</p>
+            </div>
+            <Button>Contribute</Button>
           </div>
         </section>
         {/* <section className="p-12 flex flex-col items-center w-7xl gap-6 bg-slate-100 rounded-xl shadow-md text-lg/8">
