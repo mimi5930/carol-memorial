@@ -58,6 +58,10 @@ body {
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-lilac: var(--lilac);
+  --color-tawny: var(--tawny);
+  --color-sandy-brown: var(--sandy-brown);
+  --color-magenta: var(--magenta);
+  --color-maroon: var(--maroon);
 }
 
 :root {
@@ -94,6 +98,11 @@ body {
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
   --lilac: #dde9e9;
+  /* --sandy-brown: #f7934c; */
+  --sandy-brown: #eca400;
+  --tawny: #cc5803;
+  --magenta: #72195a;
+  --maroon: #4c1036;
 }
 
 .dark {

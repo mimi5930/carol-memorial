@@ -4,13 +4,16 @@ export default function Footer() {
   return (
     <footer className="h-[25rem] bg-slate-500 flex flex-col justify-center items-center text-base text-orange-50">
       <div>
-        <h2 className="font-bold text-3xl pb-6">
+        <h2 className="font-bold text-3xl pb-6 hover:underline underline-offset-3">
           <Link to="/">Carol Ann Trainor</Link>
         </h2>
         <div className="flex gap-32">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 ">
             <h3 className="font-bold text-xl">ABOUT</h3>
-            <Link to="/about" className="hover:underline underline-offset-3">
+            <Link
+              to="/about"
+              className="text-sm hover:underline underline-offset-3"
+            >
               Carol's Life
             </Link>
             {/* TODO: Add link */}
@@ -18,7 +21,7 @@ export default function Footer() {
               Memorial Fund
             </Link>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 ">
             <h3 className="font-bold text-xl">LINKS</h3>
             <h4 className="text-lg font-semibold">Articles</h4>
             <a
@@ -41,7 +44,7 @@ export default function Footer() {
               Urban Olive and Vine
             </a>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 ">
             <h3 className="font-bold text-xl">DONATE</h3>
             <Link to="/" className="text-sm hover:underline underline-offset-3">
               Paypal
@@ -50,7 +53,7 @@ export default function Footer() {
               Other payments
             </Link>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 ">
             {/* TODO: ADD destination for link */}
             <Link
               to="/"
@@ -59,10 +62,10 @@ export default function Footer() {
               GALLERY
             </Link>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 /2">
             {/* TODO: ADD destination for link */}
             <Link
-              to="/"
+              to="/#contact"
               className="font-bold text-xl hover:underline underline-offset-3"
             >
               CONTACT

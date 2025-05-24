@@ -9,6 +9,7 @@ export default [
   layout('routes/layout.tsx', [
     index('routes/home.tsx'),
     route('/about', 'routes/about.tsx'),
+    route('/gallery', 'routes/gallery.tsx'),
     route('/memorial', 'routes/memorial.tsx')
   ])
 ] satisfies RouteConfig

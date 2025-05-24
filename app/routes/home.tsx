@@ -1,12 +1,6 @@
 import type { Route } from './+types/home'
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger
-} from '../components/ui/navigation-menu'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { carolHeadshot, headerLilacImg } from '~/assets'
 import { Button } from '~/components/ui/button'
 import { Link } from 'react-router'
@@ -18,10 +12,21 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '~/components/ui/dropdown-menu'
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '~/components/ui/form'
+import { Input } from '~/components/ui/input'
+import { z } from 'zod'
+import { formSchema } from '~/lib/formSchema'
+import { Textarea } from '~/components/ui/textarea'
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -34,35 +39,46 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema)
+  })
+
+  // TODO: Add functionality
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    console.log(values)
+  }
+
   return (
     <>
       <header className="h-[56rem] relative">
         <img
           src={headerLilacImg}
           alt=""
-          className="w-full h-full object-cover object-top border-b-8 border-amber-400 shadow-lg"
+          className="w-full h-full object-cover object-top border-b-[1rem] border-maroon shadow-lg"
         />
         <div className="absolute bottom-0 left-0 h-full w-full flex flex-col justify-center items-center">
-          <div className="flex flex-col justify-center items-center rounded-xl bg-accent/70 p-8 shadow-lg">
+          <div className="flex flex-col justify-center items-center rounded-xl bg-accent/75 p-8 shadow-lg">
             <div className="flex justify-center items-center gap-8">
-              <h2 className="font-ephesis text-6xl font-extrabold text-orange-200 text-shadow-md text-shadow-black">
+              <h2 className="font-ephesis text-6xl font-extrabold text-sandy-brown text-shadow-md text-shadow-black">
                 1966
               </h2>
               <img
                 src={carolHeadshot}
                 alt="A photo of Carol Trainor with her bright pink hair in front of her beloved lilac bush at her house"
-                className="h-[30rem] ring-amber-400 ring-8 rounded-xl shadow-xl shadow-black"
+                className="h-[30rem] ring-maroon ring-8 rounded-xl shadow-xl shadow-black"
               />
-              <h2 className="font-ephesis text-6xl font-extrabold text-orange-200 text-shadow-md text-shadow-black">
+              <h2 className="font-ephesis text-6xl font-extrabold text-sandy-brown text-shadow-md text-shadow-black">
                 2025
               </h2>
             </div>
             <div className="flex flex-col items-center py-5 gap-1.5">
               {/* TODO: Add a button to redirect. Usually present in hero image */}
-              <h2 className="font-ephesis text-5xl font-extrabold text-orange-200 text-shadow-md text-shadow-black">
+              <h2 className="font-ephesis text-5xl font-extrabold text-sandy-brown text-shadow-md text-shadow-black">
                 The world is in your hands, now use it.
               </h2>
-              <h2 className="font-ephesis text-4xl font-extrabold text-orange-200 text-shadow-md text-shadow-black">
+              <h2 className="font-ephesis text-4xl font-extrabold text-sandy-brown text-shadow-md text-shadow-black">
                 ~ Phil Collins
               </h2>
             </div>
@@ -71,7 +87,7 @@ export default function Home() {
       </header>
       <main className="py-12 flex justify-center">
         <section className="flex justify-evenly w-full ">
-          <div className="w-5xl bg-slate-100 rounded-xl shadow-md text-lg/8 p-12 flex flex-col gap-24">
+          <div className="w-6xl bg-slate-100 rounded-xl shadow-md text-lg/8 p-12 flex flex-col gap-24">
             <div className="">
               <h2 className="text-4xl font-bold pb-4">
                 A Personal Message from Carol's Family
@@ -115,11 +131,11 @@ export default function Home() {
                     </p>
                   </div>
                   <div className="flex items-center gap-2 pt-2">
-                    <Button>
-                      <a href="https://www.facebook.com/share/1GgRLGXKA3/">
+                    <a href="https://www.facebook.com/share/1GgRLGXKA3/">
+                      <Button>
                         <FacebookIcon />
-                      </a>
-                    </Button>
+                      </Button>
+                    </a>
                     <DropdownMenu>
                       <DropdownMenuTrigger>
                         <Button>Add to Calendar</Button>
@@ -174,11 +190,11 @@ export default function Home() {
                     </p>
                   </div>
                   <div className="flex items-center gap-2 pt-2">
-                    <Button>
-                      <a href="https://www.facebook.com/share/1LwVhF7NPC/">
+                    <a href="https://www.facebook.com/share/1LwVhF7NPC/">
+                      <Button>
                         <FacebookIcon />
-                      </a>
-                    </Button>
+                      </Button>
+                    </a>
                     <DropdownMenu>
                       <DropdownMenuTrigger>
                         <Button>Add to Calendar</Button>
@@ -228,12 +244,12 @@ export default function Home() {
                 accompanist of the Hudson Middle School Choirs for the past
                 several years...
               </p>
-              <Button>
-                <Link to="/about#obituary">Go to full Obituary</Link>
-              </Button>
+              <Link to="/about#obituary">
+                <Button className="w-full">Go to full Obituary</Button>
+              </Link>
             </div>
           </div>
-          <div className="w-3xl bg-slate-100 shadow-md text-lg/8 p-12 gap-8 flex flex-col h-max">
+          <div className="w-2xl bg-slate-100 shadow-md rounded-md text-lg/8 p-12 gap-8 flex flex-col">
             <h2 className="text-4xl font-bold pb-4 text-center">
               In Lieu of Flowers
             </h2>
@@ -274,6 +290,62 @@ export default function Home() {
           </div>
         </section>
       </main>
+      <section className="flex flex-col items-center pt-8" id="contact">
+        <article className="flex flex-col gap-8 w-full text-lg bg-slate-50 rounded-md p-8 shadow-md py-16">
+          <h2 className="font-ephesis text-7xl font-extrabold py-12 self-center">
+            Reach Out to Carol's Family
+          </h2>
+          <div className="flex justify-center">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-8 w-7xl"
+              >
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email *</FormLabel>
+                      <FormControl>
+                        <Input placeholder="email" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="message"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Message *</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="message" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit">Submit</Button>
+              </form>
+            </Form>
+          </div>
+        </article>
+      </section>
     </>
   )
 }
