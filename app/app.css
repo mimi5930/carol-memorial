@@ -98,10 +98,17 @@ body {
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
   --lilac: #dde9e9;
-  /* --sandy-brown: #f7934c; */
-  --sandy-brown: #eca400;
-  --tawny: #cc5803;
+  --sandy-brown: #ffc763;
+  --sandy-brown: #efefdc;
+  --sandy-brown: #dd844c;
+  --sandy-brown: #f4bc55;
+  --tawny: #f59a67;
+  --tawny: #d6756e;
   --magenta: #72195a;
+  --magenta: #dc66b8;
+  --maroon: #764766;
+  --maroon: #7c535f;
+  --maroon: #324b4b;
   --maroon: #4c1036;
 }
 
