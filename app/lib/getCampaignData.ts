@@ -38,7 +38,7 @@ export type GofundmeCountData = {
 export type GofundmeData = [GofundmeDonationsData, GofundmeCountData]
 
 export async function getCampaignData() {
-  const campaignName = 'coach-q-needs-your-support'
+  const campaignName = 'support-chad-carol-in-their-time-of-need'
   // fetch donations [0] and count [1]
   let donationRes = await Promise.all([
     fetch(

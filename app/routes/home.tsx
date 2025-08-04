@@ -40,14 +40,15 @@ export function meta({}: Route.MetaArgs) {
 }
 // loader function
 export async function loader() {
-  const gofundmeData = await getCampaignData()
-  return gofundmeData
+  return await getCampaignData()
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema)
   })
+
+  console.log(loaderData)
 
   // list of donations
   const donationsList = loaderData[0].references.donations
@@ -287,7 +288,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             <p className="text-center text-2xl">
               Contributed so far by{' '}
               <span className="font-bold">
-                {donationCounts.total_donations}
+                {donationCounts.total_donations.toLocaleString('en-US')}
               </span>{' '}
               people
             </p>
@@ -301,7 +302,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                     key={name + amount + index + index}
                     className="text-lg flex justify-between"
                   >
-                    <p>{is_anonymous ? 'Anonymous' : name}</p>
+                    <p>{name}</p>
                     <p>${amount}</p>
                   </div>
                 </Fragment>
