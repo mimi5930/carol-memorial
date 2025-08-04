@@ -1,15 +1,15 @@
-import { getCampaignData } from '~/lib/getCampaignData'
+import { getBasicCampaignData, getCampaignData } from '~/lib/getCampaignData'
 import type { Route } from './+types/memorial'
 import { Separator } from '~/components/ui/separator'
 import { Button } from '~/components/ui/button'
 
 export async function loader() {
-  return await getCampaignData()
+  return await getBasicCampaignData()
 }
 
 export default function memorial({ loaderData }: Route.ComponentProps) {
   const { amount_raised_unattributed, total_unique_donors } =
-    loaderData[1].references.counts
+    loaderData.references.counts
   return (
     <section className="flex flex-col items-center py-8">
       <article className="flex flex-col gap-18 w-7xl text-lg bg-slate-50 rounded-md p-8 shadow-md pb-24">
@@ -175,6 +175,7 @@ export default function memorial({ loaderData }: Route.ComponentProps) {
         <h3 className="text-3xl font-bold text-center">
           Make your contribution here
         </h3>
+        {/* TODO: Add functionality */}
         <Button>Donate</Button>
       </article>
     </section>

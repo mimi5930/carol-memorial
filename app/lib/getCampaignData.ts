@@ -37,6 +37,7 @@ export type GofundmeCountData = {
 }
 export type GofundmeData = [GofundmeDonationsData, GofundmeCountData]
 
+// TODO: Add error handling
 export async function getCampaignData() {
   const campaignName = 'support-chad-carol-in-their-time-of-need'
   // fetch donations [0] and count [1]
@@ -50,4 +51,13 @@ export async function getCampaignData() {
   ])
   // return both in JSON format
   return donationRes as GofundmeData
+}
+
+// fetches just the basic information (total amount, number of contributions)
+export async function getBasicCampaignData() {
+  const campaignName = 'support-chad-carol-in-their-time-of-need'
+  const campaignRes = await fetch(
+    `https://gateway.gofundme.com/web-gateway/v1/feed/${campaignName}/counts`
+  ).then(res => res.json())
+  return campaignRes as GofundmeCountData
 }
