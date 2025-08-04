@@ -4,7 +4,7 @@ export default function about() {
   return (
     <section className="flex flex-col items-center pt-8">
       <article className="flex flex-col gap-8 w-7xl text-lg bg-slate-50 rounded-md p-8 shadow-md">
-        <h2 className="font-ephesis text-7xl font-extrabold py-12 self-center">
+        <h2 className="font-ephesis text-7xl text-maroon font-extrabold py-12 self-center">
           Remembering Carol's Life
         </h2>
         {/* TODO: Add text */}
@@ -79,7 +79,7 @@ export default function about() {
         id="obituary"
         className="flex flex-col w-7xl bg-slate-50 mt-8 rounded-md shadow-md p-8 mb-8 gap-8 text-lg"
       >
-        <h2 className="font-ephesis text-7xl font-extrabold py-12 self-center">
+        <h2 className="font-ephesis text-7xl text-maroon font-extrabold py-12 self-center">
           Carol's Obituary
         </h2>
         <p>

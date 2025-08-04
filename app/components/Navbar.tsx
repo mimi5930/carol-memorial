@@ -13,7 +13,7 @@ export default function Navbar() {
   return (
     <nav className="flex justify-between w-full px-5 py-2.5 z-30 bg-lilac">
       <Link to="/">
-        <h1 className="font-ephesis text-6xl font-bold text-magenta text-shadow-xs text-shadow-black">
+        <h1 className="font-ephesis text-6xl font-bold text-sandy-brown text-shadow-md text-shadow-black">
           Carol Ann Trainor
         </h1>
       </Link>
@@ -94,9 +94,11 @@ export default function Navbar() {
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
-          <NavigationMenuItem className="px-4 py-2 text-sm font-medium">
-            Gallery
-          </NavigationMenuItem>
+          <Link to="/gallery">
+            <NavigationMenuItem className="px-4 py-2 text-sm font-medium">
+              Gallery
+            </NavigationMenuItem>
+          </Link>
           <NavigationMenuItem className="px-4 py-2 text-sm font-medium">
             <Link to="/#contact">CONTACT</Link>
           </NavigationMenuItem>

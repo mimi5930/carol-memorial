@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import type { Route } from './+types/home'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,7 +18,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -26,6 +26,7 @@ import {
 import { Input } from '~/components/ui/input'
 import { z } from 'zod'
 import { formSchema } from '~/lib/formSchema'
+import { getCampaignData } from '~/lib/getCampaignData'
 import { Textarea } from '~/components/ui/textarea'
 
 export function meta({}: Route.MetaArgs) {
@@ -37,11 +38,21 @@ export function meta({}: Route.MetaArgs) {
     }
   ]
 }
+// loader function
+export async function loader() {
+  const gofundmeData = await getCampaignData()
+  return gofundmeData
+}
 
-export default function Home() {
+export default function Home({ loaderData }: Route.ComponentProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema)
   })
+
+  // list of donations
+  const donationsList = loaderData[0].references.donations
+  // list of totals
+  const donationCounts = loaderData[1].references.counts
 
   // TODO: Add functionality
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -87,7 +98,7 @@ export default function Home() {
       </header>
       <main className="py-12 flex justify-center">
         <section className="flex justify-evenly w-full ">
-          <div className="w-6xl bg-slate-100 rounded-xl shadow-md text-lg/8 p-12 flex flex-col gap-24">
+          <div className="w-6xl text-lg/8 p-12 flex flex-col gap-24">
             <div className="">
               <h2 className="text-4xl font-bold pb-4">
                 A Personal Message from Carol's Family
@@ -108,7 +119,7 @@ export default function Home() {
               </h2>
               <h2 className="text-2xl font-bold pb-4">Visitations</h2>
               <div className="flex gap-8">
-                <div className="bg-lilac p-8 shadow-sm rounded-md flex flex-col gap-1">
+                <div className="bg-slate-100 p-8 shadow-sm rounded-md flex flex-col gap-1">
                   <div className="flex items-center gap-2">
                     <CalendarHeart />
                     <h3 className="text-lg font-bold">Friday, June 20, 2025</h3>
@@ -165,7 +176,7 @@ export default function Home() {
                     </DropdownMenu>
                   </div>
                 </div>
-                <div className="bg-lilac p-8 shadow-sm rounded-md flex flex-col gap-1">
+                <div className="bg-slate-100 p-8 shadow-sm rounded-md flex flex-col gap-1">
                   <div className="flex items-center gap-2">
                     <CalendarHeart />
                     <h3 className="text-lg font-bold">
@@ -251,7 +262,7 @@ export default function Home() {
           </div>
           <div className="w-2xl bg-slate-100 shadow-md rounded-md text-lg/8 p-12 gap-8 flex flex-col">
             <h2 className="text-4xl font-bold pb-4 text-center">
-              In Lieu of Flowers
+              Give Your Support
             </h2>
             <p>
               Carol's family asks for you to please make a donation to{' '}
@@ -265,27 +276,37 @@ export default function Home() {
               of solidarity to others who may be going through similar
               experiences of loss or hardship.
             </p>
+
             <Separator />
-            <p className="text-center text-3xl font-bold">$13,000</p>
+            <p className="text-center text-3xl font-bold">
+              $
+              {donationCounts.amount_raised_unattributed.toLocaleString(
+                'en-US'
+              )}
+            </p>
             <p className="text-center text-2xl">
-              Contributed so far by 12 people
+              Contributed so far by{' '}
+              <span className="font-bold">
+                {donationCounts.total_donations}
+              </span>{' '}
+              people
             </p>
             <Separator />
             <h3 className="text-2xl font-bold">Recent Contributions</h3>
-            <div className="text-lg flex justify-between">
-              <p>John Doe</p>
-              <p>$20.00</p>
-            </div>
-            <Separator />
-            <div className="text-lg flex justify-between">
-              <p>Anonymous</p>
-              <p>$20.00</p>
-            </div>
-            <Separator />
-            <div className="text-lg flex justify-between">
-              <p>Anonymous</p>
-              <p>$20.00</p>
-            </div>
+            {donationsList.map(({ is_anonymous, name, amount }, index) => {
+              return (
+                <Fragment key={amount + name + index}>
+                  {index != 0 && <Separator key={name + amount + index} />}
+                  <div
+                    key={name + amount + index + index}
+                    className="text-lg flex justify-between"
+                  >
+                    <p>{is_anonymous ? 'Anonymous' : name}</p>
+                    <p>${amount}</p>
+                  </div>
+                </Fragment>
+              )
+            })}
             <Button>Contribute</Button>
           </div>
         </section>
