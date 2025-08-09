@@ -39,7 +39,7 @@ export type GofundmeData = [GofundmeDonationsData, GofundmeCountData]
 
 // TODO: Add error handling
 export async function getCampaignData() {
-  const campaignName = 'support-chad-carol-in-their-time-of-need'
+  const campaignName = process.env.CAMPAIGN_NAME
   // fetch donations [0] and count [1]
   let donationRes = await Promise.all([
     fetch(
@@ -55,7 +55,7 @@ export async function getCampaignData() {
 
 // fetches just the basic information (total amount, number of contributions)
 export async function getBasicCampaignData() {
-  const campaignName = 'support-chad-carol-in-their-time-of-need'
+  const campaignName = process.env.CAMPAIGN_NAME
   const campaignRes = await fetch(
     `https://gateway.gofundme.com/web-gateway/v1/feed/${campaignName}/counts`
   ).then(res => res.json())
