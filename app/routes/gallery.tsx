@@ -1,4 +1,3 @@
-import { carolHeadshot } from '~/assets'
 import {
   Carousel,
   CarouselContent,
@@ -6,6 +5,8 @@ import {
   CarouselNext,
   CarouselPrevious
 } from '~/components/ui/carousel'
+
+export async function loader() {}
 
 export default function CarouselDemo() {
   return (
