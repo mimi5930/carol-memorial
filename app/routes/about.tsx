@@ -9,58 +9,78 @@ export default function about() {
         </h2>
         {/* TODO: Add text */}
         <p>
-          Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-          faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-          pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
-          tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
-          Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
-          hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
-          per conubia nostra inceptos himenaeos.
+          Carol Ann Trainor (née Weiher) was a remarkable woman whose warmth,
+          creativity, and dedication to others left an indelible mark on her
+          family, friends, and community. Born on October 20, 1966, in St. Paul,
+          Minnesota, to Richard and Louise (Thompson) Weiher, Carol grew up in
+          Hudson, Wisconsin, a place she would forever call home. Her childhood
+          was filled with the rhythms of music, the bonds of family, and the
+          roots of friendships that would last a lifetime.
         </p>
         <p>
-          Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-          faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-          pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
-          tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
-          Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
-          hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
-          per conubia nostra inceptos himenaeos.
+          A proud graduate of Hudson High School in 1985, Carol went on to
+          pursue her love for problem-solving by earning a degree in Applied
+          Mathematics from the University of Wisconsin–River Falls. Her sharp
+          mind and strong work ethic were matched by her artistic spirit,
+          particularly her deep love for music. From a young age, Carol
+          accompanied her school choirs on piano and would go on to share her
+          musical gifts throughout her life. She played for over a decade at
+          Hudson United Methodist Church, brought joy as the accompanist for the
+          Hudson Middle School Choirs in recent years, and rang in countless
+          seasons with handbell choirs—including the Weigand Ringers, Alleluia
+          Ringers, and Gospbells—often alongside her mother, sister, and
+          friends.
         </p>
         <p>
-          Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-          faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-          pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
-          tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
-          Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
-          hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
-          per conubia nostra inceptos himenaeos.
+          On September 1, 1993, Carol married the love of her life, Chad
+          Trainor, in Milwaukee, Wisconsin. Together they built a life grounded
+          in love, laughter, and mutual support. In 2018, they embarked on a new
+          adventure as the owners of Urban Olive and Vine, a popular Hudson café
+          and gathering place. Carol’s presence there became as iconic as her
+          ever-changing, brightly colored hair. She thrived in the bustle of the
+          café, wearing many hats—server, barista, cook, bookkeeper, and
+          community ambassador. Yet, for Carol, her most treasured role at Urban
+          was as a mentor to the many teens who worked alongside her. She
+          offered guidance, compassion, and encouragement, whether she was
+          helping with math homework, lending an ear to personal struggles, or
+          simply providing a safe space where young people felt valued and
+          heard.
         </p>
         <p>
-          Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-          faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-          pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
-          tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
-          Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
-          hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
-          per conubia nostra inceptos himenaeos.
+          Outside of her professional and musical pursuits, Carol’s home life
+          was filled with beauty and creativity. She was an avid gardener whose
+          flower beds were the envy of the neighborhood, a gifted crocheter
+          whose handmade blankets and scarves became treasured keepsakes, and a
+          devoted wife, mother, sister, and grandmother. Some of her happiest
+          moments were spent relaxing on her patio swing on a warm summer
+          evening, taking in the vibrant colors of her garden while sharing
+          stories and laughter with her family.
         </p>
         <p>
-          Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-          faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-          pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
-          tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
-          Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
-          hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
-          per conubia nostra inceptos himenaeos.
+          Family was the heart of Carol’s life. She cherished living close to
+          her mother, sister, and beloved nieces and nephew, always eager to
+          host gatherings and celebrate milestones together. Above all, her
+          greatest joy came from being with her children, Brianna and Morgan,
+          and her precious granddaughter, Lydia. She poured her heart into every
+          moment with them, whether it was a quiet conversation over coffee or a
+          lively family celebration.
         </p>
         <p>
-          Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-          faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-          pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
-          tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
-          Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
-          hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
-          per conubia nostra inceptos himenaeos.
+          Carol’s life was one of generosity, artistry, and steadfast love. She
+          is survived by her devoted husband of nearly 32 years, Chad; daughter,
+          Brianna (Matthew Schiessl); son, Morgan (Michael Miller); mother,
+          Louise Weiher; sister, Diane (Leif) Hallen; granddaughter, Lydia;
+          nieces and nephew, Mariah, Sarah, Jenna, and Nicholas; as well as many
+          extended family members, friends, and the countless lives she touched.
+          She was preceded in death by her father, Richard Weiher.
+        </p>
+        <p>
+          Though her passing on May 5, 2025, leaves a deep ache in the hearts of
+          all who knew her, Carol’s spirit will continue to shine through the
+          music she played, the gardens she nurtured, and the love she gave so
+          freely. Her family will honor her memory through a memorial fund
+          dedicated to giving back to the Hudson area community she cared for so
+          deeply.
         </p>
       </article>
       {/* TODO: Add Timeline */}

@@ -17,10 +17,18 @@ export default function CarouselDemo() {
         <div className="w-7xl flex justify-center items-center ">
           <Carousel className="w-full max-w-2xl">
             <CarouselContent>
-              {Array.from({ length: 5 }).map((_, index) => (
-                <CarouselItem key={index} className="basis-3/4">
+              {/* TODO: Populate with a gallery of photos. Google api? */}
+              {Array.from({ length: 10 }).map((_, index) => (
+                <CarouselItem key={index} className="basis-3/4 self-center">
                   <div className="p-1 bg-amber-50">
-                    <img src={carolHeadshot} alt="" />
+                    <img
+                      src={`https://placehold.co/${Math.floor(
+                        Math.random() * (1200 - 600 + 1) + 600
+                      )}x${Math.floor(
+                        Math.random() * (800 - 400 + 1) + 400
+                      )}/png`}
+                      alt=""
+                    />
                   </div>
                 </CarouselItem>
               ))}

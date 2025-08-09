@@ -16,8 +16,10 @@ export default function Footer() {
             >
               Carol's Life
             </Link>
-            {/* TODO: Add link */}
-            <Link to="/" className="text-sm hover:underline underline-offset-3">
+            <Link
+              to="/memorial"
+              className="text-sm hover:underline underline-offset-3"
+            >
               Memorial Fund
             </Link>
           </div>

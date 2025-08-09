@@ -1,4 +1,4 @@
-import { getBasicCampaignData, getCampaignData } from '~/lib/getCampaignData'
+import { getBasicCampaignData } from '~/lib/getCampaignData'
 import type { Route } from './+types/memorial'
 import { Separator } from '~/components/ui/separator'
 import { Button } from '~/components/ui/button'
