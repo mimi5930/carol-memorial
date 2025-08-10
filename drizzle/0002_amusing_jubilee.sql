@@ -1,0 +1,1 @@
+ALTER TABLE `users` ADD `ip` text NOT NULL;

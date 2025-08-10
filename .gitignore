@@ -7,3 +7,6 @@
 
 # Environment Varibles
 .env
+
+# DB
+*.db

@@ -1,3 +1,4 @@
+import { eq } from 'drizzle-orm'
 import {
   Carousel,
   CarouselContent,
@@ -5,8 +6,23 @@ import {
   CarouselNext,
   CarouselPrevious
 } from '~/components/ui/carousel'
+import { db } from '~/db'
+import { posts, likes } from '~/db/schema'
+import seedData from '~/db/seed'
 
-export async function loader() {}
+export async function loader() {
+  await seedData()
+  const res = await db
+    .select({
+      id: posts.id,
+      text: posts.text,
+      userId: posts.userId,
+      likeCount: db.$count(likes, eq(likes.postId, posts.id))
+    })
+    .from(posts)
+    .groupBy(posts.id)
+  console.log(res)
+}
 
 export default function CarouselDemo() {
   return (
