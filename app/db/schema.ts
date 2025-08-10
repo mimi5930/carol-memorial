@@ -36,9 +36,3 @@ export const posts = sqliteTable('posts', {
   userId: integer('user_id').references(() => users.id),
   ...timestamps
 })
-
-export const likes = sqliteTable('likes', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  userId: text('user_id').references(() => users.id),
-  postId: text('post_id').references(() => posts.id)
-})

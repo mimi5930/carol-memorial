@@ -25,7 +25,7 @@ import {
 } from '~/components/ui/form'
 import { Input } from '~/components/ui/input'
 import { z } from 'zod'
-import { formSchema } from '~/lib/formSchema'
+import { contactFormSchema } from '~/lib/formSchema'
 import { getCampaignData } from '~/lib/getCampaignData'
 import { Textarea } from '~/components/ui/textarea'
 
@@ -44,11 +44,9 @@ export async function loader() {
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema)
+  const form = useForm<z.infer<typeof contactFormSchema>>({
+    resolver: zodResolver(contactFormSchema)
   })
-
-  console.log(loaderData)
 
   // list of donations
   const donationsList = loaderData[0].references.donations
@@ -56,7 +54,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   const donationCounts = loaderData[1].references.counts
 
   // TODO: Add functionality
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof contactFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values)
