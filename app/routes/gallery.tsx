@@ -1,4 +1,3 @@
-import { eq } from 'drizzle-orm'
 import {
   Carousel,
   CarouselContent,
@@ -8,6 +7,7 @@ import {
 } from '~/components/ui/carousel'
 import { db } from '~/db'
 import { posts, users } from '~/db/schema'
+import { eq } from 'drizzle-orm'
 // import seedData from '~/db/seed'
 import type { Route } from './+types/gallery'
 import {
@@ -15,7 +15,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage
 } from '~/components/ui/form'
 import { useForm } from 'react-hook-form'
@@ -25,12 +24,25 @@ import type z from 'zod'
 import { Textarea } from '~/components/ui/textarea'
 import { Separator } from '~/components/ui/separator'
 import carolPrompts from '~/lib/carolPrompts.json'
-import { useState } from 'react'
-import { useSubmit } from 'react-router'
+import { useEffect, useState } from 'react'
+import { redirect, useSubmit, useFetcher, data } from 'react-router'
 import { Button } from '~/components/ui/button'
 import GoogleIcon from '~/components/svg/GoogleIcon'
+import {
+  createAuthorizeUrl,
+  getAuthorizedUserData
+} from '~/actions/googleAuth.server'
 
-export async function loader() {
+export async function loader({ params, request }: Route.LoaderArgs) {
+  // See if user is signed in with google
+  const url = new URL(request.url)
+  const code = url.searchParams.get('code')
+  if (code) {
+    const user = getAuthorizedUserData(code)
+    console.log(user)
+  }
+
+  // Get posts from db
   // await seedData()
   try {
     const res = await db
@@ -44,17 +56,30 @@ export async function loader() {
       .from(posts)
       .leftJoin(users, eq(users.id, posts.userId))
       .groupBy(posts.id)
-    console.log('server-side res', res)
     return res
   } catch (error) {
     return console.log(error)
   }
 }
 
+export async function action({ request }: Route.ActionArgs) {
+  const res = await createAuthorizeUrl()
+  return data(
+    { url: res.url },
+    {
+      headers: {
+        // CORS
+        'Access-Control-Allow-Origin': 'http://localhost:5173',
+        // For testing w/out https
+        'Referrer-Policy': 'no-referrer-when-downgrade'
+      }
+    }
+  )
+}
+
 export default function Gallery({ loaderData }: Route.ComponentProps) {
   // Get loader data
   const comments = loaderData
-  console.log('Loader data retrieved', loaderData)
 
   // Form setup
   const form = useForm<z.infer<typeof memoryFormSchema>>({
@@ -72,6 +97,14 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
       Math.floor(Math.random() * carolPrompts.prompts.length)
     ]
   )
+
+  const fetcher = useFetcher()
+
+  useEffect(() => {
+    if (fetcher.data?.url) {
+      window.location.href = fetcher.data.url
+    }
+  }, [fetcher.data])
 
   // Render
   return (
@@ -122,11 +155,12 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
           Share a Memory of Carol
         </label>
         <div className="w-3xl flex gap-2">
-          {/* TODO: Sign in section */}
-          <Button className="size-24 aspect-square rounded-md bg-maroon p-1 text-slate-50 text-wrap underline ">
-            Sign in
-            <GoogleIcon className="size-6" />
-          </Button>
+          <fetcher.Form method="post" action="/gallery/">
+            <Button className="size-24 aspect-square rounded-md bg-maroon p-1 text-slate-50 text-wrap underline">
+              Sign in
+              <GoogleIcon className="size-6" />
+            </Button>
+          </fetcher.Form>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
               <FormField
