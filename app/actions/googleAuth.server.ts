@@ -1,6 +1,5 @@
 import { OAuth2Client } from 'google-auth-library'
 import { data } from 'react-router'
-import 'dotenv/config'
 
 export async function createAuthorizeUrl() {
   // const redirectUrl = 'http://127.0.0.1:5173/gallery'

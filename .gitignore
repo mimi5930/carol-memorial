@@ -10,3 +10,6 @@
 
 # DB
 *.db
+
+#Sample Data
+sampleUserInfo.json

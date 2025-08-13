@@ -32,13 +32,18 @@ import {
   createAuthorizeUrl,
   getAuthorizedUserData
 } from '~/actions/googleAuth.server'
+import sampleUserInfo from '../../sampleUserInfo.json'
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   // See if user is signed in with google
   const url = new URL(request.url)
   const code = url.searchParams.get('code')
+  let user = null
   if (code) {
-    const user = getAuthorizedUserData(code)
+    user = await getAuthorizedUserData(code)
+    // ? Find way to delete the code. Security purposes (probs not necessary)
+    url.searchParams.delete('code')
+
     console.log(user)
   }
 
@@ -56,7 +61,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
       .from(posts)
       .leftJoin(users, eq(users.id, posts.userId))
       .groupBy(posts.id)
-    return res
+    return { DbData: res, userData: user }
   } catch (error) {
     return console.log(error)
   }
@@ -78,8 +83,19 @@ export async function action({ request }: Route.ActionArgs) {
 }
 
 export default function Gallery({ loaderData }: Route.ComponentProps) {
+  // Image State
+  const [userImage, setUserImage] = useState<string | null>(null)
+
   // Get loader data
-  const comments = loaderData
+  const comments = loaderData?.DbData
+  // const userInfo = loaderData?.userData
+
+  const userInfo = sampleUserInfo
+
+  useEffect(() => {
+    if (userInfo?.picture) setUserImage(userInfo.picture)
+    console.log(userImage)
+  }, [userImage])
 
   // Form setup
   const form = useForm<z.infer<typeof memoryFormSchema>>({
@@ -155,12 +171,24 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
           Share a Memory of Carol
         </label>
         <div className="w-3xl flex gap-2">
-          <fetcher.Form method="post" action="/gallery/">
-            <Button className="size-24 aspect-square rounded-md bg-maroon p-1 text-slate-50 text-wrap underline">
-              Sign in
-              <GoogleIcon className="size-6" />
+          {typeof userImage === 'string' ? (
+            <Button className="size-24 aspect-square rounded-md bg-maroon p-1 text-slate-50 text-wrap underline relative">
+              Sign out
+              <img
+                src={userImage}
+                alt="Your google avatar"
+                className="absolute size-full rounded-md"
+              />
             </Button>
-          </fetcher.Form>
+          ) : (
+            <fetcher.Form method="post" action="/gallery/">
+              <Button className="size-24 aspect-square rounded-md bg-maroon p-1 text-slate-50 text-wrap underline">
+                Sign in
+                <GoogleIcon className="size-6" />
+              </Button>
+            </fetcher.Form>
+          )}
+
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
               <FormField
