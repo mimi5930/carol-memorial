@@ -32,8 +32,12 @@ import {
   createAuthorizeUrl,
   handleGoogleOAuth
 } from '~/utils/googleAuth.server'
-import sampleUserInfo from '../../sampleUserInfo.json'
-import { getUserFromSession, storeUserSession } from '~/utils/JWT.server'
+// import sampleUserInfo from '../../sampleUserInfo.json'
+import {
+  destroyUserSession,
+  getUserFromSession,
+  storeUserSession
+} from '~/utils/JWT.server'
 
 async function checkCookiesForUserInfo(request: Request) {
   // See if user is stored in the session
@@ -45,7 +49,6 @@ async function checkCookiesForUserInfo(request: Request) {
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const url = new URL(request.url)
   // Holder for Set-Cookie header
   let setCookieHeader: string | undefined
   // See if user is stored in the session
@@ -101,23 +104,36 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export async function action({ request }: Route.ActionArgs) {
   // Check if user is stored in cookie
-  let user = checkCookiesForUserInfo(request)
-  const res = await createAuthorizeUrl()
-  if (res.ok) {
-    return data(
-      { url: res.data.url },
-      {
-        headers: {
-          // CORS
-          'Access-Control-Allow-Origin': 'http://localhost:5173',
-          // For testing w/out https
-          'Referrer-Policy': 'no-referrer-when-downgrade'
-        }
-      }
-    )
+  const url = new URL(request.url)
+  const signOut = url.searchParams.get('sign-out')
+  const signIn = url.searchParams.get('sign-in')
+
+  if (typeof signOut === 'string') {
+    // Sign user out (get rid of auth session)
+    console.log('ran signOut function!')
+    const cookieHeader = request.headers.get('Cookie')
+    const clearedCookie = await destroyUserSession(cookieHeader)
+
+    return redirect('/gallery', { headers: { 'Set-Cookie': clearedCookie } })
   }
-  console.log('No authorized url generated')
-  return
+
+  if (typeof signIn === 'string') {
+    console.log('rand signIn function')
+    const res = await createAuthorizeUrl()
+    if (res.ok) {
+      return data(
+        { url: res.data.url },
+        {
+          headers: {
+            // CORS
+            'Access-Control-Allow-Origin': 'http://localhost:5173',
+            // For testing w/out https
+            'Referrer-Policy': 'no-referrer-when-downgrade'
+          }
+        }
+      )
+    }
+  }
 }
 
 export default function Gallery({ loaderData }: Route.ComponentProps) {
@@ -131,9 +147,12 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
   // const userInfo = sampleUserInfo
 
   useEffect(() => {
-    if (userInfo?.picture) setUserImage(`${userInfo.picture}-rj`)
-    console.log(userImage)
-  }, [userImage])
+    if (userInfo?.picture) {
+      setUserImage(`${userInfo.picture}-rj`)
+    } else {
+      setUserImage(null)
+    }
+  }, [userInfo])
 
   // Form setup
   const form = useForm<z.infer<typeof memoryFormSchema>>({
@@ -210,16 +229,22 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
         </label>
         <div className="w-3xl flex gap-2">
           {typeof userImage === 'string' ? (
-            <Button className="size-24 aspect-square rounded-md bg-maroon p-1 text-slate-50 text-wrap underline relative">
-              Sign out
-              <img
-                src={userImage}
-                alt="Your google avatar"
-                className="absolute size-full rounded-md"
-              />
-            </Button>
+            <div className="flex flex-col">
+              <fetcher.Form method="post" action="/gallery?sign-out">
+                <Button className="size-24 aspect-square rounded-md bg-maroon p-1 text-slate-50 text-wrap underline relative hover:opacity-75">
+                  <img
+                    src={userImage}
+                    alt="Your google avatar"
+                    className="absolute size-full rounded-md"
+                  />
+                  <p className="text-blue-700 underline z-10 absolute bottom-0.5 bg-lilac opacity-75 rounded-lg p-1">
+                    Sign out
+                  </p>
+                </Button>
+              </fetcher.Form>
+            </div>
           ) : (
-            <fetcher.Form method="post" action="/gallery/">
+            <fetcher.Form method="post" action="/gallery?sign-in">
               <Button className="size-24 aspect-square rounded-md bg-maroon p-1 text-slate-50 text-wrap underline">
                 Sign in
                 <GoogleIcon className="size-6" />

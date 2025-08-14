@@ -92,6 +92,13 @@ export async function getUserFromSession(cookieHeader?: string) {
   return { sub: googleId, email, name, picture }
 }
 
+// Remove user JWT cookie
+export async function destroyUserSession(cookieHeader: string | null) {
+  const { getSession, destroySession } = createSessionHelpers()
+  const session = await getSession(cookieHeader)
+  return await destroySession(session)
+}
+
 export async function banUser(userId: string) {
   await db
     .update(users)
