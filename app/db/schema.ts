@@ -1,38 +1,40 @@
 import { sql } from 'drizzle-orm'
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+import { v4 as uuidV4 } from 'uuid'
 
-const timestamps = {
-  updated_at: text(),
-  created_at: text()
-    .default(sql`(CURRENT_TIMESTAMP)`)
-    .notNull(),
-  deleted_at: text()
-}
+export const users = sqliteTable('users', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => uuidV4()),
 
-// TODO: Integrate with googleAPIs
-export const users = sqliteTable(
-  'users',
-  {
-    id: integer('id').primaryKey({ autoIncrement: true }),
-    // when used with googleAPIs
-    // id: integer('id').primarykey()
-    name: text('name').notNull(),
-    email: text('email').notNull().unique(),
-    ip: text().notNull(),
-    picture: text('picture').default('https://placehold.co/400'),
-    role: text('role').default('user'),
-    ...timestamps
-  }
-  //, (table) => [
-  //   primaryKey({ columns: [table.bookId, table.authorId] }),
-  //   // Or PK with custom name
-  //   primaryKey({ name: 'custom_name', columns: [table.bookId, table.authorId] })
-  // ]
-)
+  googleId: text('google_id').notNull().unique(),
+  email: text('email').unique(),
+  name: text('name').notNull(),
+  picture: text('picture'),
+
+  role: text('role').notNull().default('user'), // 'user', 'admin', 'banned'
+  status: text('status').notNull().default('active'), // 'active', 'disabled'
+
+  createdAt: integer('created_at', { mode: 'timestamp' }).default(
+    sql`CURRENT_TIMESTAMP`
+  ),
+  updatedAt: integer('updated_at', { mode: 'timestamp' })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .$onUpdateFn(() => new Date()),
+  lastLoginAt: integer('last_login_at', { mode: 'timestamp' })
+})
 
 export const posts = sqliteTable('posts', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   text: text('text', { length: 256 }),
   userId: integer('user_id').references(() => users.id),
-  ...timestamps
+  createdAt: integer('created_at', { mode: 'timestamp' }).default(
+    sql`CURRENT_TIMESTAMP`
+  ),
+  updatedAt: integer('updated_at', { mode: 'timestamp' })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .$onUpdateFn(() => new Date()),
+  deletedAt: integer('updated_at', { mode: 'timestamp' })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .$onUpdateFn(() => new Date())
 })

@@ -30,21 +30,47 @@ import { Button } from '~/components/ui/button'
 import GoogleIcon from '~/components/svg/GoogleIcon'
 import {
   createAuthorizeUrl,
-  getAuthorizedUserData
-} from '~/actions/googleAuth.server'
+  handleGoogleOAuth
+} from '~/utils/googleAuth.server'
 import sampleUserInfo from '../../sampleUserInfo.json'
+import { getUserFromSession, storeUserSession } from '~/utils/JWT.server'
 
-export async function loader({ params, request }: Route.LoaderArgs) {
-  // See if user is signed in with google
+async function checkCookiesForUserInfo(request: Request) {
+  // See if user is stored in the session
+  const cookie = request.headers.get('Cookie')
+  console.log('cookies in headers', cookie)
+  if (!cookie) return undefined
+
+  return await getUserFromSession(cookie)
+}
+
+export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url)
-  const code = url.searchParams.get('code')
-  let user = null
-  if (code) {
-    user = await getAuthorizedUserData(code)
-    // ? Find way to delete the code. Security purposes (probs not necessary)
-    url.searchParams.delete('code')
+  // Holder for Set-Cookie header
+  let setCookieHeader: string | undefined
+  // See if user is stored in the session
+  let user = await checkCookiesForUserInfo(request)
+  // query search params for 'code' field from google auth
+  const code = new URL(request.url).searchParams.get('code')
 
-    console.log(user)
+  // See if user was redirected from google auth
+  if (!user && code) {
+    const profile = await handleGoogleOAuth(code)
+    // set user value to oAuth values and store in session memory
+    if (profile.ok) {
+      user = profile.data
+      setCookieHeader = await storeUserSession(profile.data.sub)
+      console.log('user session set', setCookieHeader)
+
+      // Remove ?code from URL to prevent "invalid_grant" on refresh
+      return redirect('/gallery', {
+        headers: { 'Set-Cookie': setCookieHeader }
+      })
+    }
+    // !Next! in the action (when pressing log in button, add functionality to check session storage)
+    // TODO: Admin privs
+    // TODO: Log out
+    // TODO: Edit/Delete posts
   }
 
   // Get posts from db
@@ -61,25 +87,37 @@ export async function loader({ params, request }: Route.LoaderArgs) {
       .from(posts)
       .leftJoin(users, eq(users.id, posts.userId))
       .groupBy(posts.id)
-    return { DbData: res, userData: user }
+    return data(
+      { DbData: res, userData: user },
+      setCookieHeader
+        ? { headers: { 'Set-Cookie': setCookieHeader } }
+        : undefined
+    )
   } catch (error) {
-    return console.log(error)
+    console.error(error)
+    throw new Response('Server error', { status: 500 })
   }
 }
 
 export async function action({ request }: Route.ActionArgs) {
+  // Check if user is stored in cookie
+  let user = checkCookiesForUserInfo(request)
   const res = await createAuthorizeUrl()
-  return data(
-    { url: res.url },
-    {
-      headers: {
-        // CORS
-        'Access-Control-Allow-Origin': 'http://localhost:5173',
-        // For testing w/out https
-        'Referrer-Policy': 'no-referrer-when-downgrade'
+  if (res.ok) {
+    return data(
+      { url: res.data.url },
+      {
+        headers: {
+          // CORS
+          'Access-Control-Allow-Origin': 'http://localhost:5173',
+          // For testing w/out https
+          'Referrer-Policy': 'no-referrer-when-downgrade'
+        }
       }
-    }
-  )
+    )
+  }
+  console.log('No authorized url generated')
+  return
 }
 
 export default function Gallery({ loaderData }: Route.ComponentProps) {
@@ -88,12 +126,12 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
 
   // Get loader data
   const comments = loaderData?.DbData
-  // const userInfo = loaderData?.userData
+  const userInfo = loaderData?.userData
 
-  const userInfo = sampleUserInfo
+  // const userInfo = sampleUserInfo
 
   useEffect(() => {
-    if (userInfo?.picture) setUserImage(userInfo.picture)
+    if (userInfo?.picture) setUserImage(`${userInfo.picture}-rj`)
     console.log(userImage)
   }, [userImage])
 
@@ -197,6 +235,7 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
+                      {/* TODO: Needs error handling for when user is not signed in */}
                       <Textarea
                         placeholder={prompt}
                         className="bg-slate-100 p-8 shadow-sm rounded-md min-h-24 w-full"
