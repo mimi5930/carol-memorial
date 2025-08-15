@@ -11,5 +11,5 @@ export const contactFormSchema = z.object({
 })
 
 export const memoryFormSchema = z.object({
-  message: z.string().min(1)
+  message: z.string().min(1, { message: 'Must contain at least 1 character' })
 })

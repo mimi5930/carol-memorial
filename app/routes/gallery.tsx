@@ -25,7 +25,14 @@ import { Textarea } from '~/components/ui/textarea'
 import { Separator } from '~/components/ui/separator'
 import carolPrompts from '~/lib/carolPrompts.json'
 import { useEffect, useState } from 'react'
-import { redirect, useSubmit, useFetcher, data } from 'react-router'
+import {
+  redirect,
+  useSubmit,
+  useFetcher,
+  data,
+  useFormAction,
+  useActionData
+} from 'react-router'
 import { Button } from '~/components/ui/button'
 import GoogleIcon from '~/components/svg/GoogleIcon'
 import {
@@ -72,7 +79,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     }
     // !Next! in the action (when pressing log in button, add functionality to check session storage)
     // TODO: Admin privs
-    // TODO: Log out
+    // TODO: add posts
     // TODO: Edit/Delete posts
   }
 
@@ -104,66 +111,70 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export async function action({ request }: Route.ActionArgs) {
   // Check if user is stored in cookie
-  const url = new URL(request.url)
-  const signOut = url.searchParams.get('sign-out')
-  const signIn = url.searchParams.get('sign-in')
+  const formData = await request.formData()
+  const actionType = formData.get('_action')
 
-  if (typeof signOut === 'string') {
-    // Sign user out (get rid of auth session)
-    console.log('ran signOut function!')
-    const cookieHeader = request.headers.get('Cookie')
-    const clearedCookie = await destroyUserSession(cookieHeader)
+  switch (actionType) {
+    // sign out action
+    case 'signOut':
+      const cookieHeader = request.headers.get('Cookie')
+      const clearedCookie = await destroyUserSession(cookieHeader)
+      return redirect('/gallery', { headers: { 'Set-Cookie': clearedCookie } })
 
-    return redirect('/gallery', { headers: { 'Set-Cookie': clearedCookie } })
-  }
+    // sign in action
+    case 'signIn':
+      const res = await createAuthorizeUrl()
+      if (res.ok) {
+        return data(
+          { url: res.data.url },
+          {
+            headers: {
+              // CORS
+              'Access-Control-Allow-Origin': 'http://localhost:5173',
+              // For testing w/out https
+              'Referrer-Policy': 'no-referrer-when-downgrade'
+            }
+          }
+        )
+      }
 
-  if (typeof signIn === 'string') {
-    console.log('rand signIn function')
-    const res = await createAuthorizeUrl()
-    if (res.ok) {
-      return data(
-        { url: res.data.url },
-        {
-          headers: {
-            // CORS
-            'Access-Control-Allow-Origin': 'http://localhost:5173',
-            // For testing w/out https
-            'Referrer-Policy': 'no-referrer-when-downgrade'
+    // Submitted memory form
+    case 'formSubmit':
+      console.log('formSubmit case in action', formData)
+      // check for auth cookie
+      let cookie = request.headers.get('Cookie') ?? undefined
+      const user = await getUserFromSession(cookie)
+
+      if (!user) {
+        return {
+          formErrors: {
+            message: 'Please sign in.'
           }
         }
-      )
-    }
+      }
+
+      const message = formData.get('message')?.toString().trim()
+      if (!message) {
+        return {
+          formErrors: { message: 'Message cannot be empty.' }
+        }
+      }
+
+      // TODO: Save to DB
+
+      return new Response(JSON.stringify({ success: true }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+
+    default:
+      throw new Response('Unknown action', { status: 400 })
   }
 }
 
 export default function Gallery({ loaderData }: Route.ComponentProps) {
   // Image State
   const [userImage, setUserImage] = useState<string | null>(null)
-
-  // Get loader data
-  const comments = loaderData?.DbData
-  const userInfo = loaderData?.userData
-
-  // const userInfo = sampleUserInfo
-
-  useEffect(() => {
-    if (userInfo?.picture) {
-      setUserImage(`${userInfo.picture}-rj`)
-    } else {
-      setUserImage(null)
-    }
-  }, [userInfo])
-
-  // Form setup
-  const form = useForm<z.infer<typeof memoryFormSchema>>({
-    resolver: zodResolver(memoryFormSchema)
-  })
-
-  // Form submission
-  function onSubmit(data: z.infer<typeof memoryFormSchema>) {
-    console.log(data)
-  }
-
   // Prompt State
   const [prompt] = useState<string>(
     carolPrompts.prompts[
@@ -171,13 +182,54 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
     ]
   )
 
+  // Get loader data
+  const comments = loaderData?.DbData
+  const userInfo = loaderData?.userData
+  const actionData = useActionData<{
+    formErrors?: { message?: string }
+    success?: boolean
+  }>()
+
   const fetcher = useFetcher()
+  // const userInfo = sampleUserInfo
+
+  const submit = useSubmit()
+
+  // Form setup
+  const form = useForm<z.infer<typeof memoryFormSchema>>({
+    resolver: zodResolver(memoryFormSchema)
+  })
+
+  // Form submission
+  async function onSubmit(data: z.infer<typeof memoryFormSchema>) {
+    // submit data after built-in validation
+    submit(
+      { ...data, _action: 'formSubmit' },
+      { action: '/gallery', method: 'post' }
+    )
+  }
 
   useEffect(() => {
+    // Handle Google avatar display
+    if (userInfo?.picture) {
+      setUserImage(`${userInfo.picture}-rj`)
+    } else {
+      setUserImage(null)
+    }
+
+    // Handle Google sign-in redirect
     if (fetcher.data?.url) {
       window.location.href = fetcher.data.url
     }
-  }, [fetcher.data])
+
+    // Handle server-side validation errors
+    if (actionData?.formErrors) {
+      form.setError('message', {
+        type: 'server',
+        message: actionData.formErrors.message
+      })
+    }
+  }, [userInfo, fetcher.data, actionData, form])
 
   // Render
   return (
@@ -230,7 +282,8 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
         <div className="w-3xl flex gap-2">
           {typeof userImage === 'string' ? (
             <div className="flex flex-col">
-              <fetcher.Form method="post" action="/gallery?sign-out">
+              <fetcher.Form method="post" action="/gallery">
+                <input type="hidden" name="_action" value="signOut" />
                 <Button className="size-24 aspect-square rounded-md bg-maroon p-1 text-slate-50 text-wrap underline relative hover:opacity-75">
                   <img
                     src={userImage}
@@ -244,7 +297,8 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
               </fetcher.Form>
             </div>
           ) : (
-            <fetcher.Form method="post" action="/gallery?sign-in">
+            <fetcher.Form method="post" action="/gallery">
+              <input type="hidden" name="_action" value="signIn" />
               <Button className="size-24 aspect-square rounded-md bg-maroon p-1 text-slate-50 text-wrap underline">
                 Sign in
                 <GoogleIcon className="size-6" />
@@ -253,7 +307,10 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
           )}
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+            <fetcher.Form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="w-full"
+            >
               <FormField
                 control={form.control}
                 name="message"
@@ -272,7 +329,7 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
                   </FormItem>
                 )}
               />
-            </form>
+            </fetcher.Form>
           </Form>
         </div>
       </div>
