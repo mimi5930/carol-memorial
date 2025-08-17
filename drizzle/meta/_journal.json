@@ -43,6 +43,27 @@
       "when": 1755194998776,
       "tag": "0005_even_may_parker",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1755217504810,
+      "tag": "0006_solid_changeling",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1755364189529,
+      "tag": "0007_spicy_kinsey_walden",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1755367184732,
+      "tag": "0008_plain_grey_gargoyle",
+      "breakpoints": true
     }
   ]
 }

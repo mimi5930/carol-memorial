@@ -7,7 +7,7 @@ import {
 } from '~/components/ui/carousel'
 import { db } from '~/db'
 import { posts, users } from '~/db/schema'
-import { eq } from 'drizzle-orm'
+import { eq, desc, asc, and, isNull } from 'drizzle-orm'
 // import seedData from '~/db/seed'
 import type { Route } from './+types/gallery'
 import {
@@ -18,7 +18,7 @@ import {
   FormMessage
 } from '~/components/ui/form'
 import { useForm } from 'react-hook-form'
-import { memoryFormSchema } from '~/lib/formSchema'
+import { memoryFormSchema, memoryFormUpdateSchema } from '~/lib/formSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type z from 'zod'
 import { Textarea } from '~/components/ui/textarea'
@@ -30,8 +30,8 @@ import {
   useSubmit,
   useFetcher,
   data,
-  useFormAction,
-  useActionData
+  useActionData,
+  useNavigate
 } from 'react-router'
 import { Button } from '~/components/ui/button'
 import GoogleIcon from '~/components/svg/GoogleIcon'
@@ -42,17 +42,17 @@ import {
 // import sampleUserInfo from '../../sampleUserInfo.json'
 import {
   destroyUserSession,
-  getUserFromSession,
+  getUserDataFromSession,
+  getUserIdFromSession,
   storeUserSession
 } from '~/utils/JWT.server'
 
 async function checkCookiesForUserInfo(request: Request) {
   // See if user is stored in the session
   const cookie = request.headers.get('Cookie')
-  console.log('cookies in headers', cookie)
   if (!cookie) return undefined
 
-  return await getUserFromSession(cookie)
+  return await getUserDataFromSession(cookie)
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
@@ -70,7 +70,6 @@ export async function loader({ request }: Route.LoaderArgs) {
     if (profile.ok) {
       user = profile.data
       setCookieHeader = await storeUserSession(profile.data.sub)
-      console.log('user session set', setCookieHeader)
 
       // Remove ?code from URL to prevent "invalid_grant" on refresh
       return redirect('/gallery', {
@@ -86,7 +85,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   // Get posts from db
   // await seedData()
   try {
-    const res = await db
+    const postArray = await db
       .select({
         id: posts.id,
         text: posts.text,
@@ -95,10 +94,12 @@ export async function loader({ request }: Route.LoaderArgs) {
         userPicture: users.picture
       })
       .from(posts)
+      .where(isNull(posts.deletedAt))
       .leftJoin(users, eq(users.id, posts.userId))
-      .groupBy(posts.id)
+      // !Need to limit amount of posting
+      .orderBy(desc(posts.createdAt))
     return data(
-      { DbData: res, userData: user },
+      { DbData: postArray, userData: user },
       setCookieHeader
         ? { headers: { 'Set-Cookie': setCookieHeader } }
         : undefined
@@ -112,13 +113,59 @@ export async function loader({ request }: Route.LoaderArgs) {
 export async function action({ request }: Route.ActionArgs) {
   // Check if user is stored in cookie
   const formData = await request.formData()
+  let user
+  const cookie = request.headers.get('Cookie')
+  if (cookie) user = await getUserIdFromSession(cookie ?? undefined)
+  const postId = formData.get('postId')?.toString()
+
+  // Update function
+  if (request.method === 'PUT') {
+    if (!postId) {
+      throw new Response('Forbidden', { status: 403 })
+    }
+
+    const text = formData.get('message')?.toString().trim()
+
+    if (!user) {
+      throw new Response('Forbidden', { status: 403 })
+    }
+
+    const post = await db
+      .select()
+      .from(posts)
+      .where(eq(posts.id, postId))
+      .limit(1)
+
+    if (!post.length || post[0].userId !== user.id) {
+      throw new Response('Forbidden', { status: 403 })
+    }
+
+    const update = await db
+      .update(posts)
+      .set({ text })
+      .where(eq(posts.id, postId))
+
+    if (!update.changes) {
+      console.error('No changes made in Db on update', update)
+      return new Response(JSON.stringify({ success: false }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      })
+    }
+
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    })
+  }
+
+  // Actions with _action field
   const actionType = formData.get('_action')
 
   switch (actionType) {
     // sign out action
     case 'signOut':
-      const cookieHeader = request.headers.get('Cookie')
-      const clearedCookie = await destroyUserSession(cookieHeader)
+      const clearedCookie = await destroyUserSession(cookie ?? null)
       return redirect('/gallery', { headers: { 'Set-Cookie': clearedCookie } })
 
     // sign in action
@@ -140,11 +187,7 @@ export async function action({ request }: Route.ActionArgs) {
 
     // Submitted memory form
     case 'formSubmit':
-      console.log('formSubmit case in action', formData)
       // check for auth cookie
-      let cookie = request.headers.get('Cookie') ?? undefined
-      const user = await getUserFromSession(cookie)
-
       if (!user) {
         return {
           formErrors: {
@@ -160,13 +203,51 @@ export async function action({ request }: Route.ActionArgs) {
         }
       }
 
-      // TODO: Save to DB
+      const postDbResponse = await db
+        .insert(posts)
+        .values({ text: message, userId: user.id })
 
       return new Response(JSON.stringify({ success: true }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' }
       })
 
+    case 'edit':
+      if (!user) {
+        throw new Response('Unauthorized', { status: 401 })
+      }
+
+      return {
+        editPostAuth: true,
+        postId: formData.get('postId')?.toString().trim()
+      }
+
+    case 'delete':
+      if (request.method !== 'DELETE')
+        throw new Response('Unknown action', { status: 400 })
+
+      if (!user) throw new Response('Forbidden', { status: 403 })
+
+      if (!postId) throw new Response('Bad Request', { status: 400 })
+
+      const [post] = await db
+        .select()
+        .from(posts)
+        .where(eq(posts.userId, user.id))
+
+      if (!post || (post.userId !== user.id && user)) {
+        throw new Response('Forbidden', { status: 403 })
+      }
+
+      await db
+        .update(posts)
+        .set({ deletedAt: new Date().toISOString() })
+        .where(eq(posts.id, postId))
+
+      return new Response(JSON.stringify({ success: true }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
     default:
       throw new Response('Unknown action', { status: 400 })
   }
@@ -181,6 +262,8 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
       Math.floor(Math.random() * carolPrompts.prompts.length)
     ]
   )
+  // Tracks which post IDs are pending confirmation
+  const [pendingDelete, setPendingDelete] = useState<Set<string>>(new Set())
 
   // Get loader data
   const comments = loaderData?.DbData
@@ -188,26 +271,25 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
   const actionData = useActionData<{
     formErrors?: { message?: string }
     success?: boolean
+    editPostAuth?: boolean
+    postId?: string
   }>()
+  console.log(actionData)
 
   const fetcher = useFetcher()
   // const userInfo = sampleUserInfo
 
   const submit = useSubmit()
+  const navigate = useNavigate()
 
   // Form setup
   const form = useForm<z.infer<typeof memoryFormSchema>>({
     resolver: zodResolver(memoryFormSchema)
   })
 
-  // Form submission
-  async function onSubmit(data: z.infer<typeof memoryFormSchema>) {
-    // submit data after built-in validation
-    submit(
-      { ...data, _action: 'formSubmit' },
-      { action: '/gallery', method: 'post' }
-    )
-  }
+  const updateForm = useForm<z.infer<typeof memoryFormSchema>>({
+    resolver: zodResolver(memoryFormSchema)
+  })
 
   useEffect(() => {
     // Handle Google avatar display
@@ -229,7 +311,32 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
         message: actionData.formErrors.message
       })
     }
+
+    if (actionData?.success) {
+      form.reset()
+    }
+
+    if (actionData?.editPostAuth && actionData.postId) {
+      const postToEdit = comments.find(c => c.id === actionData.postId)
+      if (postToEdit) {
+        updateForm.reset({ message: postToEdit.text ?? '' })
+      }
+    }
   }, [userInfo, fetcher.data, actionData, form])
+
+  function handleDeleteClick(id: string) {
+    // Add the post to pending deletion
+    setPendingDelete(prev => new Set(prev).add(id))
+
+    // Auto-revert after 5 seconds
+    setTimeout(() => {
+      setPendingDelete(prev => {
+        const newSet = new Set(prev)
+        newSet.delete(id)
+        return newSet
+      })
+    }, 5000) // 5000ms = 5 seconds
+  }
 
   // Render
   return (
@@ -290,7 +397,7 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
                     alt="Your google avatar"
                     className="absolute size-full rounded-md"
                   />
-                  <p className="text-blue-700 underline z-10 absolute bottom-0.5 bg-lilac opacity-75 rounded-lg p-1">
+                  <p className="text-blue-700 underline z-10 absolute bottom-0.5 bg-lilac opacity-75 rounded-sm p-1">
                     Sign out
                   </p>
                 </Button>
@@ -305,10 +412,14 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
               </Button>
             </fetcher.Form>
           )}
-
           <Form {...form}>
             <fetcher.Form
-              onSubmit={form.handleSubmit(onSubmit)}
+              onSubmit={form.handleSubmit(value => {
+                submit(
+                  { ...value, _action: 'formSubmit' },
+                  { action: '/gallery', method: 'post' }
+                )
+              })}
               className="w-full"
             >
               <FormField
@@ -317,7 +428,6 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      {/* TODO: Needs error handling for when user is not signed in */}
                       <Textarea
                         placeholder={prompt}
                         className="bg-slate-100 p-8 shadow-sm rounded-md min-h-24 w-full"
@@ -332,25 +442,122 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
             </fetcher.Form>
           </Form>
         </div>
+        {userInfo?.role === 'admin' && (
+          <Button
+            type="button"
+            variant={'link'}
+            onClick={() => navigate('/gallery/admin')}
+          >
+            To admin Dashboard
+          </Button>
+        )}
       </div>
       <Separator />
       {comments &&
-        comments.map(({ id, userPicture, userName, text }) => {
+        comments.map(({ id, userPicture, userName, text, userId }) => {
           return (
             <div className="w-3xl flex gap-2" key={id}>
               {userPicture && (
                 <img
-                  src={userPicture}
+                  src={`${userPicture}-rj`}
                   alt=""
                   className="h-24 aspect-square rounded-md"
                 />
               )}
-              <div className="bg-slate-100 p-8 shadow-sm rounded-md flex flex-col gap-1 min-h-10 w-full relative">
-                <div className="flex flex-col gap-2">
-                  <h3 className="font-bold">{userName}</h3>
-                  <p>{text}</p>
+              {actionData?.editPostAuth && actionData.postId === id ? (
+                <Form {...updateForm}>
+                  <fetcher.Form
+                    onSubmit={updateForm.handleSubmit(values => {
+                      const fd = new FormData()
+                      fd.append('postId', id)
+                      fd.append('message', values.message)
+                      submit(fd, { method: 'put' })
+                    })}
+                    className="w-full"
+                  >
+                    <FormField
+                      control={updateForm.control}
+                      name="message"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Textarea
+                              className="bg-slate-100 p-8 shadow-sm rounded-md min-h-24 w-full"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                          <div className="flex gap-1 w-full">
+                            <Button className="grow" type="submit">
+                              Submit
+                            </Button>
+                            <Button
+                              type="button"
+                              className="grow"
+                              onClick={() => navigate('/gallery')}
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  </fetcher.Form>
+                </Form>
+              ) : (
+                <div className="bg-slate-100 p-8 shadow-sm rounded-md flex flex-col gap-1 min-h-10 w-full relative">
+                  <div className="flex flex-col gap-2 wrap-break-word">
+                    <h3 className="font-bold">{userName}</h3>
+                    <p className="text-wrap">{text}</p>
+                  </div>
+                  {userInfo?.id === userId ? (
+                    <div className="absolute bottom-1 right-1 flex gap-1">
+                      <Button
+                        className="opacity-75 hover:opacity-100"
+                        variant={'outline'}
+                        onClick={() => {
+                          submit(
+                            { _action: 'edit', postId: id },
+                            { method: 'post' }
+                          )
+                        }}
+                      >
+                        Edit
+                      </Button>
+                      {/* Button for initial delete select*/}
+                      {!pendingDelete.has(id) ? (
+                        <Button
+                          className="opacity-75 hover:opacity-100 hover:bg-maroon hover:text-white bg-maroon text-white"
+                          variant={'outline'}
+                          onClick={() => handleDeleteClick(id)}
+                        >
+                          Delete
+                        </Button>
+                      ) : (
+                        <Button
+                          className="opacity-75 hover:opacity-100 hover:bg-maroon hover:text-white bg-maroon text-white"
+                          variant={'outline'}
+                          onClick={() => {
+                            // Perform the delete
+                            submit(
+                              { _action: 'delete', postId: id },
+                              { method: 'delete' }
+                            )
+                            // Remove from pending set immediately
+                            setPendingDelete(prev => {
+                              const newSet = new Set(prev)
+                              newSet.delete(id)
+                              return newSet
+                            })
+                          }}
+                        >
+                          I'm sure I want to delete
+                        </Button>
+                      )}
+                    </div>
+                  ) : null}
                 </div>
-              </div>
+              )}
             </div>
           )
         })}

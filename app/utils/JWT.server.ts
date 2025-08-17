@@ -67,7 +67,7 @@ export async function storeUserSession(googleId: string, role?: string) {
 }
 
 // Verify a user session, return DB user is active
-export async function getUserFromSession(cookieHeader?: string) {
+export async function getUserDataFromSession(cookieHeader?: string) {
   const { getSession } = createSessionHelpers()
   if (!cookieHeader) return undefined
 
@@ -80,16 +80,47 @@ export async function getUserFromSession(cookieHeader?: string) {
 
   // Get user from DB
   const user = await db
-    .select()
+    .select({
+      id: users.id,
+      sub: users.googleId,
+      email: users.email,
+      name: users.name,
+      picture: users.picture,
+      status: users.status,
+      role: users.role
+    })
     .from(users)
     .where(eq(users.googleId, decoded.googleId))
     .get()
 
   if (!user) return undefined
   if (user.status !== 'active') return undefined // banned or disabled
-  const { googleId, email, name, picture } = user
 
-  return { sub: googleId, email, name, picture }
+  return user
+}
+
+export async function getUserIdFromSession(cookieHeader?: string) {
+  const { getSession } = createSessionHelpers()
+  if (!cookieHeader) return undefined
+
+  const session = await getSession(cookieHeader)
+  const token = session.get('jwt')
+  if (!token) return undefined
+
+  const decoded = decodeToken(token)
+  if (!decoded) return undefined
+
+  // Get user from DB
+  const user = await db
+    .select({ id: users.id, status: users.status })
+    .from(users)
+    .where(eq(users.googleId, decoded.googleId))
+    .get()
+
+  if (!user) return undefined
+  if (user.status !== 'active') return undefined // banned or disabled
+
+  return { id: user.id }
 }
 
 // Remove user JWT cookie

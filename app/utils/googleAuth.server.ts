@@ -3,6 +3,7 @@ import { db } from '../db'
 import { users } from '../db/schema'
 import { eq } from 'drizzle-orm'
 import jwt from 'jsonwebtoken'
+import { isAdminUser } from './admin.server'
 
 export type UserObject = {
   sub: string
@@ -11,6 +12,9 @@ export type UserObject = {
   given_name?: string
   family_name?: string
   picture: string
+  id: string
+  status: string
+  role: string
 }
 
 type ServiceResult<T> =
@@ -139,17 +143,20 @@ export async function handleGoogleOAuth(code: string) {
         email: email,
         name: name,
         picture: picture,
-        lastLoginAt: new Date()
+        lastLoginAt: new Date().toISOString()
       })
       .where(eq(users.googleId, sub))
   } else {
     console.log('user not found and added', existingUser)
+    // check if id is on the whitelist
+    const admin = isAdminUser(sub)
     await db.insert(users).values({
       googleId: sub,
       email: email,
       name: name,
       picture: picture,
-      lastLoginAt: new Date()
+      lastLoginAt: new Date().toISOString(),
+      role: admin ? 'admin' : 'user'
     })
   }
 

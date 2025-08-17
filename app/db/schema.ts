@@ -12,29 +12,25 @@ export const users = sqliteTable('users', {
   name: text('name').notNull(),
   picture: text('picture'),
 
-  role: text('role').notNull().default('user'), // 'user', 'admin', 'banned'
+  role: text('role').notNull().default('user'), // 'user', 'admin'
   status: text('status').notNull().default('active'), // 'active', 'disabled'
 
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`
-  ),
-  updatedAt: integer('updated_at', { mode: 'timestamp' })
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text('updated_at')
     .default(sql`CURRENT_TIMESTAMP`)
-    .$onUpdateFn(() => new Date()),
-  lastLoginAt: integer('last_login_at', { mode: 'timestamp' })
+    .$onUpdateFn(() => new Date().toISOString()),
+  lastLoginAt: text('last_login_at')
 })
 
 export const posts = sqliteTable('posts', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => uuidV4()),
   text: text('text', { length: 256 }),
-  userId: integer('user_id').references(() => users.id),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`
-  ),
-  updatedAt: integer('updated_at', { mode: 'timestamp' })
+  userId: text('user_id').references(() => users.id),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text('updated_at')
     .default(sql`CURRENT_TIMESTAMP`)
-    .$onUpdateFn(() => new Date()),
-  deletedAt: integer('updated_at', { mode: 'timestamp' })
-    .default(sql`CURRENT_TIMESTAMP`)
-    .$onUpdateFn(() => new Date())
+    .$onUpdateFn(() => new Date().toISOString()),
+  deletedAt: text('deleted_at')
 })

@@ -10,6 +10,8 @@ export default [
     index('routes/home.tsx'),
     route('/about', 'routes/about.tsx'),
     route('/gallery', 'routes/gallery.tsx'),
-    route('/memorial', 'routes/memorial.tsx')
+    route('/gallery/admin', 'routes/admin.tsx'),
+    route('/memorial', 'routes/memorial.tsx'),
+    route('/donate', 'routes/donate.tsx')
   ])
 ] satisfies RouteConfig

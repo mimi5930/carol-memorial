@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { string, z } from 'zod'
 
 export const contactFormSchema = z.object({
   name: z.string().optional(),
@@ -12,4 +12,9 @@ export const contactFormSchema = z.object({
 
 export const memoryFormSchema = z.object({
   message: z.string().min(1, { message: 'Must contain at least 1 character' })
+})
+
+export const memoryFormUpdateSchema = z.object({
+  message: z.string().min(1, { message: 'Must contain at least 1 character' }),
+  postId: z.string()
 })
