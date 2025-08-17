@@ -62,39 +62,41 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
-      <header className="h-[56rem] relative">
+      {/* Header */}
+      <header className="h-[40rem] md:h-[56rem] relative">
         <img
           src={headerLilacImg}
           alt=""
-          className="w-full h-full object-cover object-top border-b-[1rem] border-maroon shadow-lg"
+          className="w-full h-full object-cover object-top border-b-[0.5rem] md:border-b-[1rem] border-maroon shadow-lg"
         />
-        <div className="absolute bottom-0 left-0 h-full w-full flex flex-col justify-center items-center">
-          <div className="flex flex-col justify-center items-center rounded-xl bg-accent/75 p-8 shadow-lg">
-            <div className="flex justify-center items-center gap-8">
-              <h2 className="font-ephesis text-6xl font-extrabold text-sandy-brown text-shadow-md text-shadow-black">
+        <div className="absolute inset-0 flex flex-col justify-center items-center">
+          <div className="flex flex-col justify-center items-center rounded-xl bg-accent/75 p-6 md:p-8 shadow-lg mx-4">
+            <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8">
+              <h2 className="font-ephesis text-4xl md:text-6xl font-extrabold text-sandy-brown text-shadow-md text-shadow-black">
                 1966
               </h2>
               <img
                 src={carolHeadshot}
-                alt="A photo of Carol Trainor with her bright pink hair in front of her beloved lilac bush at her house"
-                className="h-[30rem] ring-maroon ring-8 rounded-xl shadow-xl shadow-black"
+                alt="Carol Trainor"
+                className="h-64 md:h-[30rem] ring-maroon ring-4 md:ring-8 rounded-xl shadow-xl shadow-black"
               />
-              <h2 className="font-ephesis text-6xl font-extrabold text-sandy-brown text-shadow-md text-shadow-black">
+              <h2 className="font-ephesis text-4xl md:text-6xl font-extrabold text-sandy-brown text-shadow-md text-shadow-black">
                 2025
               </h2>
             </div>
-            <div className="flex flex-col items-center py-5 gap-1.5">
-              {/* TODO: Add a button to redirect. Usually present in hero image */}
-              <h2 className="font-ephesis text-5xl font-extrabold text-sandy-brown text-shadow-md text-shadow-black">
+            <div className="flex flex-col items-center py-5 gap-2 text-center">
+              <h2 className="font-ephesis text-2xl md:text-5xl font-extrabold text-sandy-brown text-shadow-md text-shadow-black">
                 The world is in your hands, now use it.
               </h2>
-              <h2 className="font-ephesis text-4xl font-extrabold text-sandy-brown text-shadow-md text-shadow-black">
+              <h2 className="font-ephesis text-xl md:text-4xl font-extrabold text-sandy-brown text-shadow-md text-shadow-black">
                 ~ Phil Collins
               </h2>
             </div>
           </div>
         </div>
       </header>
+
+      {/* Main content */}
       <main className="py-12 flex justify-center">
         <section className="flex justify-evenly w-full ">
           <div className="w-6xl text-lg/8 p-12 flex flex-col gap-24">
@@ -111,131 +113,57 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 this time."
               </p>
             </div>
+
             <Separator />
-            <div>
-              <h2 className="text-4xl font-bold pb-4">
-                Celebrate Carol's Life
-              </h2>
-              <h2 className="text-2xl font-bold pb-4">Visitations</h2>
-              <div className="flex gap-8">
-                <div className="bg-slate-100 p-8 shadow-sm rounded-md flex flex-col gap-1">
-                  <div className="flex items-center gap-2">
-                    <CalendarHeart />
-                    <h3 className="text-lg font-bold">Friday, June 20, 2025</h3>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock />
-                    <h3>2PM - 6PM</h3>
-                  </div>
-                  <div>
-                    <p>
-                      <a
-                        href="https://www.oconnellfuneralhomes.com/"
-                        className="underline"
-                      >
-                        O'Connell Family Funeral Home
-                      </a>
+            <section className="py-12">
+              <div className="max-w-5xl mx-auto">
+                <h2 className="text-2xl md:text-4xl font-bold text-slate-800 mb-6">
+                  A Glimpse of Carol’s Life
+                </h2>
+                <p className="text-slate-600 mb-10 max-w-2xl">
+                  A few memories from family and friends that capture her
+                  warmth, humor, and love.
+                </p>
+
+                {/* Memory posts */}
+                <div className="grid gap-6 md:grid-cols-3 text-left">
+                  <div className="bg-white p-6 rounded-2xl shadow-md">
+                    <p className="italic text-slate-700">
+                      “Carol never let anyone leave her home without food in
+                      their hands and a smile on their face.”
                     </p>
-                    <p className="text-sm">
-                      520 11th Street South Hudson, WI 54016
+                    <p className="mt-4 text-sm text-slate-500">
+                      – A longtime neighbor
                     </p>
                   </div>
-                  <div className="flex items-center gap-2 pt-2">
-                    <a href="https://www.facebook.com/share/1GgRLGXKA3/">
-                      <Button>
-                        <FacebookIcon />
-                      </Button>
-                    </a>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger>
-                        <Button>Add to Calendar</Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem>
-                          <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&dates=20250620T200000Z%2F20250621T000000Z&details=Carol%20Trainor%20passed%20away%20on%20May%205%2C%202025.%20Visitations%20open%20to%20the%20public%20will%20be%202-6%20PM%20Friday%20June%2020%20and%2011%20AM%20-%203%20PM%20Saturday%20June%2021%20at%20the%20O%E2%80%99Connell%20Family%20Funeral%20Home%20in%20Hudson%2C%20WI.&location=520%2011th%20Street%20South%20Hudson%2C%20WI%2054016&text=Carol%20Trainor%20Visitation">
-                            Google Calendar
-                          </a>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <a href="https://calendar.yahoo.com/?desc=Carol%20Trainor%20passed%20away%20on%20May%205%2C%202025.%20Visitations%20open%20to%20the%20public%20will%20be%202-6%20PM%20Friday%20June%2020%20and%2011%20AM%20-%203%20PM%20Saturday%20June%2021%20at%20the%20O%E2%80%99Connell%20Family%20Funeral%20Home%20in%20Hudson%2C%20WI.&dur=false&et=20250621T000000Z&in_loc=520%2011th%20Street%20South%20Hudson%2C%20WI%2054016&st=20250620T200000Z&title=Carol%20Trainor%20Visitation&v=60">
-                            Yahoo
-                          </a>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <a href="https://outlook.live.com/calendar/0/action/compose?allday=false&body=Carol%20Trainor%20passed%20away%20on%20May%205%2C%202025.%20Visitations%20open%20to%20the%20public%20will%20be%202-6%20PM%20Friday%20June%2020%20and%2011%20AM%20-%203%20PM%20Saturday%20June%2021%20at%20the%20O%E2%80%99Connell%20Family%20Funeral%20Home%20in%20Hudson%2C%20WI.&enddt=2025-06-20T19%3A00%3A00&location=520%2011th%20Street%20South%20Hudson%2C%20WI%2054016&path=%2Fcalendar%2Faction%2Fcompose&rru=addevent&startdt=2025-06-20T15%3A00%3A00&subject=Carol%20Trainor%20Visitation">
-                            Outlook
-                          </a>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <a href="https://calendar.aol.com/?desc=Carol%20Trainor%20passed%20away%20on%20May%205%2C%202025.%20Visitations%20open%20to%20the%20public%20will%20be%202-6%20PM%20Friday%20June%2020%20and%2011%20AM%20-%203%20PM%20Saturday%20June%2021%20at%20the%20O%E2%80%99Connell%20Family%20Funeral%20Home%20in%20Hudson%2C%20WI.&dur=false&et=20250621T000000Z&in_loc=520%2011th%20Street%20South%20Hudson%2C%20WI%2054016&st=20250620T200000Z&title=Carol%20Trainor%20Visitation&v=60">
-                            AOL Calendar
-                          </a>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                  <div className="bg-white p-6 rounded-2xl shadow-md">
+                    <p className="italic text-slate-700">
+                      “Her laughter was contagious. She turned ordinary days
+                      into joyful ones.”
+                    </p>
+                    <p className="mt-4 text-sm text-slate-500">
+                      – A close friend
+                    </p>
+                  </div>
+                  <div className="bg-white p-6 rounded-2xl shadow-md">
+                    <p className="italic text-slate-700">
+                      “She taught me how to garden, and every spring I still
+                      hear her voice reminding me where to plant the tulips.”
+                    </p>
+                    <p className="mt-4 text-sm text-slate-500">
+                      – A family member
+                    </p>
                   </div>
                 </div>
-                <div className="bg-slate-100 p-8 shadow-sm rounded-md flex flex-col gap-1">
-                  <div className="flex items-center gap-2">
-                    <CalendarHeart />
-                    <h3 className="text-lg font-bold">
-                      Saturday, June 21, 2025
-                    </h3>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock />
-                    <h3>11AM - 3PM</h3>
-                  </div>
-                  <div>
-                    <p>
-                      <a
-                        href="https://www.oconnellfuneralhomes.com/"
-                        className="underline"
-                      >
-                        O'Connell Family Funeral Home
-                      </a>
-                    </p>
-                    <p className="text-sm">
-                      520 11th Street South Hudson, WI 54016
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2 pt-2">
-                    <a href="https://www.facebook.com/share/1LwVhF7NPC/">
-                      <Button>
-                        <FacebookIcon />
-                      </Button>
-                    </a>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger>
-                        <Button>Add to Calendar</Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem>
-                          <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&dates=20250621T170000Z%2F20250621T210000Z&details=Carol%20Trainor%20passed%20away%20on%20May%205%2C%202025.%20Visitations%20open%20to%20the%20public%20will%20be%202-6%20PM%20Friday%20June%2020%20and%2011%20AM%20-%203%20PM%20Saturday%20June%2021%20at%20the%20O%E2%80%99Connell%20Family%20Funeral%20Home%20in%20Hudson%2C%20WI.&location=520%2011th%20Street%20South%20Hudson%2C%20WI%2054016&text=Carol%20Trainor%20Visitation">
-                            Google Calendar
-                          </a>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <a href="https://calendar.yahoo.com/?desc=Carol%20Trainor%20passed%20away%20on%20May%205%2C%202025.%20Visitations%20open%20to%20the%20public%20will%20be%202-6%20PM%20Friday%20June%2020%20and%2011%20AM%20-%203%20PM%20Saturday%20June%2021%20at%20the%20O%E2%80%99Connell%20Family%20Funeral%20Home%20in%20Hudson%2C%20WI.&dur=false&et=20250621T210000Z&in_loc=520%2011th%20Street%20South%20Hudson%2C%20WI%2054016&st=20250621T170000Z&title=Carol%20Trainor%20Visitation&v=60">
-                            Yahoo
-                          </a>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <a href="https://outlook.live.com/calendar/0/action/compose?allday=false&body=Carol%20Trainor%20passed%20away%20on%20May%205%2C%202025.%20Visitations%20open%20to%20the%20public%20will%20be%202-6%20PM%20Friday%20June%2020%20and%2011%20AM%20-%203%20PM%20Saturday%20June%2021%20at%20the%20O%E2%80%99Connell%20Family%20Funeral%20Home%20in%20Hudson%2C%20WI.&enddt=2025-06-21T16%3A00%3A00&location=520%2011th%20Street%20South%20Hudson%2C%20WI%2054016&path=%2Fcalendar%2Faction%2Fcompose&rru=addevent&startdt=2025-06-21T12%3A00%3A00&subject=Carol%20Trainor%20Visitation">
-                            Outlook
-                          </a>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <a href="https://calendar.aol.com/?desc=Carol%20Trainor%20passed%20away%20on%20May%205%2C%202025.%20Visitations%20open%20to%20the%20public%20will%20be%202-6%20PM%20Friday%20June%2020%20and%2011%20AM%20-%203%20PM%20Saturday%20June%2021%20at%20the%20O%E2%80%99Connell%20Family%20Funeral%20Home%20in%20Hudson%2C%20WI.&dur=false&et=20250621T210000Z&in_loc=520%2011th%20Street%20South%20Hudson%2C%20WI%2054016&st=20250621T170000Z&title=Carol%20Trainor%20Visitation&v=60">
-                            AOL Calendar
-                          </a>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
+
+                {/* Button to gallery */}
+                <div className="mt-10">
+                  <Button asChild size="lg" className="w-full">
+                    <Link to="/gallery">View Full Gallery</Link>
+                  </Button>
                 </div>
               </div>
-            </div>
+            </section>
             <Separator />
             <div className="flex flex-col gap-4">
               <h2 className="text-4xl font-bold">Obituary</h2>
@@ -254,9 +182,10 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 accompanist of the Hudson Middle School Choirs for the past
                 several years...
               </p>
-              <Link to="/about#obituary">
-                <Button className="w-full">Go to full Obituary</Button>
-              </Link>
+
+              <Button asChild className="w-full">
+                <Link to="/about#obituary">Go to full Obituary</Link>
+              </Button>
             </div>
           </div>
           <div className="w-2xl bg-slate-100 shadow-md rounded-md text-lg/8 p-12 gap-8 flex flex-col">
