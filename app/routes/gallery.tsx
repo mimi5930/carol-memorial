@@ -7,7 +7,7 @@ import {
 } from '~/components/ui/carousel'
 import { db } from '~/db'
 import { posts, users } from '~/db/schema'
-import { eq, desc, asc, and, isNull } from 'drizzle-orm'
+import { eq, desc, asc, and, isNull, sql } from 'drizzle-orm'
 // import seedData from '~/db/seed'
 import type { Route } from './+types/gallery'
 import {
@@ -31,7 +31,7 @@ import {
   useFetcher,
   data,
   useActionData,
-  useNavigate
+  Link
 } from 'react-router'
 import { Button } from '~/components/ui/button'
 import GoogleIcon from '~/components/svg/GoogleIcon'
@@ -46,6 +46,7 @@ import {
   getUserIdFromSession,
   storeUserSession
 } from '~/utils/JWT.server'
+import { headerLilacImg } from '~/assets'
 
 async function checkCookiesForUserInfo(request: Request) {
   // See if user is stored in the session
@@ -53,6 +54,16 @@ async function checkCookiesForUserInfo(request: Request) {
   if (!cookie) return undefined
 
   return await getUserDataFromSession(cookie)
+}
+
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: 'Gallery – Carol Trainor' },
+    {
+      name: 'description',
+      content: 'Remember Carol with us through pictures and memories'
+    }
+  ]
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
@@ -76,10 +87,6 @@ export async function loader({ request }: Route.LoaderArgs) {
         headers: { 'Set-Cookie': setCookieHeader }
       })
     }
-    // !Next! in the action (when pressing log in button, add functionality to check session storage)
-    // TODO: Admin privs
-    // TODO: add posts
-    // TODO: Edit/Delete posts
   }
 
   // Get posts from db
@@ -94,9 +101,11 @@ export async function loader({ request }: Route.LoaderArgs) {
         userPicture: users.picture
       })
       .from(posts)
-      .where(isNull(posts.deletedAt))
       .leftJoin(users, eq(users.id, posts.userId))
-      // !Need to limit amount of posting
+      .where(
+        and(isNull(posts.deletedAt), sql`not ${users.status} = 'disabled'`)
+      )
+      // TODO: Need to limit amount of posting
       .orderBy(desc(posts.createdAt))
     return data(
       { DbData: postArray, userData: user },
@@ -280,7 +289,6 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
   // const userInfo = sampleUserInfo
 
   const submit = useSubmit()
-  const navigate = useNavigate()
 
   // Form setup
   const form = useForm<z.infer<typeof memoryFormSchema>>({
@@ -340,227 +348,230 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
 
   // Render
   return (
-    <section className="flex flex-col items-center py-12 gap-12">
-      <h1 className="font-ephesis text-7xl font-extrabold text-maroon py-6">
-        Remember Carol With Us...
-      </h1>
-      <h2 className="font-ephesis text-5xl font-bold text-maroon">
-        Through Pictures
-      </h2>
-      <div className="bg-maroon p-16 rounded-md shadow-lg">
-        <div className="w-7xl flex justify-center items-center min-h-[50rem]">
-          <Carousel className="w-full max-w-2xl">
-            <CarouselContent>
-              {/* TODO: Populate with a gallery of photos. Google api? */}
-              {Array.from({ length: 10 }).map((_, index) => (
-                <CarouselItem key={index} className="basis-3/4 self-center">
-                  <div className="p-1 bg-amber-50">
-                    <img
-                      src={`https://placehold.co/${Math.floor(
-                        Math.random() * (1200 - 600 + 1) + 600
-                      )}x${Math.floor(
-                        Math.random() * (800 - 400 + 1) + 400
-                      )}/png`}
-                      alt=""
-                    />
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
+    <>
+      <header className="h-[28rem] relative">
+        <img
+          src={headerLilacImg}
+          alt=""
+          className="w-full h-full object-cover object-top border-b-[1rem] border-maroon shadow-lg"
+        />
+        <div className="absolute inset-0 flex flex-col justify-center items-center bg-accent/70">
+          <h1 className="font-ephesis text-6xl font-extrabold text-sandy-brown text-shadow-md text-shadow-black">
+            Remember Carol with us
+          </h1>
         </div>
-        {/* TODO: Add link */}
-        <p className="text-center pt-12 text-slate-50 underline">
-          View more pictures
-        </p>
-      </div>
-      <h2 className="font-ephesis text-5xl font-bold text-maroon py-6">
-        Through Memories
-      </h2>
-      <div className="flex flex-col gap-1">
-        <label
-          htmlFor="message"
-          className="font-bold text-xl text-center text-maroon"
-        >
-          Share a Memory of Carol
-        </label>
-        <div className="w-3xl flex gap-2">
-          {typeof userImage === 'string' ? (
-            <div className="flex flex-col">
+      </header>
+      <section className="flex flex-col items-center py-12 gap-12">
+        <h2 className="font-ephesis text-5xl font-bold text-maroon">
+          Through Pictures
+        </h2>
+        <div className="bg-maroon p-16 rounded-md shadow-lg">
+          <div className="w-7xl flex justify-center items-center min-h-[50rem]">
+            <Carousel className="w-full max-w-2xl">
+              <CarouselContent>
+                {/* TODO: Populate with a gallery of photos. Google api? */}
+                {Array.from({ length: 10 }).map((_, index) => (
+                  <CarouselItem key={index} className="basis-3/4 self-center">
+                    <div className="p-1 bg-amber-50">
+                      <img
+                        src={`https://placehold.co/${Math.floor(
+                          Math.random() * (1200 - 600 + 1) + 600
+                        )}x${Math.floor(
+                          Math.random() * (800 - 400 + 1) + 400
+                        )}/png`}
+                        alt=""
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </div>
+          {/* TODO: Add link */}
+          <p className="text-center pt-12 text-slate-50 underline">
+            View more pictures
+          </p>
+        </div>
+        <h2 className="font-ephesis text-5xl font-bold text-maroon py-6">
+          Through Memories
+        </h2>
+        <div className="flex flex-col gap-1">
+          <label
+            htmlFor="message"
+            className="font-bold text-xl text-center text-maroon"
+          >
+            Share a Memory of Carol
+          </label>
+          <div className="w-3xl flex gap-2">
+            {typeof userImage === 'string' ? (
+              <div className="flex flex-col">
+                <fetcher.Form method="post" action="/gallery">
+                  <input type="hidden" name="_action" value="signOut" />
+                  <Button className="size-24 aspect-square rounded-md bg-maroon p-1 text-slate-50 text-wrap underline relative hover:opacity-75">
+                    <img
+                      src={userImage}
+                      alt="Your google avatar"
+                      className="absolute size-full rounded-md"
+                    />
+                    <p className="text-blue-700 underline z-10 absolute bottom-0.5 bg-lilac opacity-75 rounded-sm p-1">
+                      Sign out
+                    </p>
+                  </Button>
+                </fetcher.Form>
+              </div>
+            ) : (
               <fetcher.Form method="post" action="/gallery">
-                <input type="hidden" name="_action" value="signOut" />
-                <Button className="size-24 aspect-square rounded-md bg-maroon p-1 text-slate-50 text-wrap underline relative hover:opacity-75">
-                  <img
-                    src={userImage}
-                    alt="Your google avatar"
-                    className="absolute size-full rounded-md"
-                  />
-                  <p className="text-blue-700 underline z-10 absolute bottom-0.5 bg-lilac opacity-75 rounded-sm p-1">
-                    Sign out
-                  </p>
+                <input type="hidden" name="_action" value="signIn" />
+                <Button className="size-24 aspect-square rounded-md bg-maroon p-1 text-slate-50 text-wrap underline">
+                  Sign in
+                  <GoogleIcon className="size-6" />
                 </Button>
               </fetcher.Form>
-            </div>
-          ) : (
-            <fetcher.Form method="post" action="/gallery">
-              <input type="hidden" name="_action" value="signIn" />
-              <Button className="size-24 aspect-square rounded-md bg-maroon p-1 text-slate-50 text-wrap underline">
-                Sign in
-                <GoogleIcon className="size-6" />
-              </Button>
-            </fetcher.Form>
-          )}
-          <Form {...form}>
-            <fetcher.Form
-              onSubmit={form.handleSubmit(value => {
-                submit(
-                  { ...value, _action: 'formSubmit' },
-                  { action: '/gallery', method: 'post' }
-                )
-              })}
-              className="w-full"
-            >
-              <FormField
-                control={form.control}
-                name="message"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Textarea
-                        placeholder={prompt}
-                        className="bg-slate-100 p-8 shadow-sm rounded-md min-h-24 w-full"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                    <Button type="submit">Submit</Button>
-                  </FormItem>
-                )}
-              />
-            </fetcher.Form>
-          </Form>
-        </div>
-        {userInfo?.role === 'admin' && (
-          <Button
-            type="button"
-            variant={'link'}
-            onClick={() => navigate('/gallery/admin')}
-          >
-            To admin Dashboard
-          </Button>
-        )}
-      </div>
-      <Separator />
-      {comments &&
-        comments.map(({ id, userPicture, userName, text, userId }) => {
-          return (
-            <div className="w-3xl flex gap-2" key={id}>
-              {userPicture && (
-                <img
-                  src={`${userPicture}-rj`}
-                  alt=""
-                  className="h-24 aspect-square rounded-md"
+            )}
+            <Form {...form}>
+              <fetcher.Form
+                onSubmit={form.handleSubmit(value => {
+                  submit(
+                    { ...value, _action: 'formSubmit' },
+                    { action: '/gallery', method: 'post' }
+                  )
+                })}
+                className="w-full"
+              >
+                <FormField
+                  control={form.control}
+                  name="message"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Textarea
+                          placeholder={prompt}
+                          className="bg-slate-100 p-8 shadow-sm rounded-md min-h-24 w-full"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                      <Button type="submit">Submit</Button>
+                    </FormItem>
+                  )}
                 />
-              )}
-              {actionData?.editPostAuth && actionData.postId === id ? (
-                <Form {...updateForm}>
-                  <fetcher.Form
-                    onSubmit={updateForm.handleSubmit(values => {
-                      const fd = new FormData()
-                      fd.append('postId', id)
-                      fd.append('message', values.message)
-                      submit(fd, { method: 'put' })
-                    })}
-                    className="w-full"
-                  >
-                    <FormField
-                      control={updateForm.control}
-                      name="message"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <Textarea
-                              className="bg-slate-100 p-8 shadow-sm rounded-md min-h-24 w-full"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                          <div className="flex gap-1 w-full">
-                            <Button className="grow" type="submit">
-                              Submit
-                            </Button>
-                            <Button
-                              type="button"
-                              className="grow"
-                              onClick={() => navigate('/gallery')}
-                            >
-                              Cancel
-                            </Button>
-                          </div>
-                        </FormItem>
-                      )}
-                    />
-                  </fetcher.Form>
-                </Form>
-              ) : (
-                <div className="bg-slate-100 p-8 shadow-sm rounded-md flex flex-col gap-1 min-h-10 w-full relative">
-                  <div className="flex flex-col gap-2 wrap-break-word">
-                    <h3 className="font-bold">{userName}</h3>
-                    <p className="text-wrap">{text}</p>
-                  </div>
-                  {userInfo?.id === userId ? (
-                    <div className="absolute bottom-1 right-1 flex gap-1">
-                      <Button
-                        className="opacity-75 hover:opacity-100"
-                        variant={'outline'}
-                        onClick={() => {
-                          submit(
-                            { _action: 'edit', postId: id },
-                            { method: 'post' }
-                          )
-                        }}
-                      >
-                        Edit
-                      </Button>
-                      {/* Button for initial delete select*/}
-                      {!pendingDelete.has(id) ? (
+              </fetcher.Form>
+            </Form>
+          </div>
+          {userInfo?.role === 'admin' && (
+            <Button type="button" variant={'link'} asChild>
+              <Link to={'/gallery/admin'}>To admin Dashboard</Link>
+            </Button>
+          )}
+        </div>
+        <Separator />
+        {comments &&
+          comments.map(({ id, userPicture, userName, text, userId }) => {
+            return (
+              <div className="w-3xl flex gap-2" key={id}>
+                {userPicture && (
+                  <img
+                    src={`${userPicture}-rj`}
+                    alt=""
+                    className="h-24 aspect-square rounded-md"
+                  />
+                )}
+                {actionData?.editPostAuth && actionData.postId === id ? (
+                  <Form {...updateForm}>
+                    <fetcher.Form
+                      onSubmit={updateForm.handleSubmit(values => {
+                        const fd = new FormData()
+                        fd.append('postId', id)
+                        fd.append('message', values.message)
+                        submit(fd, { method: 'put' })
+                      })}
+                      className="w-full"
+                    >
+                      <FormField
+                        control={updateForm.control}
+                        name="message"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Textarea
+                                className="bg-slate-100 p-8 shadow-sm rounded-md min-h-24 w-full"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                            <div className="flex gap-1 w-full">
+                              <Button className="grow" type="submit">
+                                Submit
+                              </Button>
+                              <Button type="button" className="grow">
+                                <Link to={'/gallery'}>Cancel</Link>
+                              </Button>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                    </fetcher.Form>
+                  </Form>
+                ) : (
+                  <div className="bg-slate-100 p-8 shadow-sm rounded-md flex flex-col gap-1 min-h-10 w-full relative">
+                    <div className="flex flex-col gap-2 wrap-break-word">
+                      <h3 className="font-bold">{userName}</h3>
+                      <p className="text-wrap">{text}</p>
+                    </div>
+                    {userInfo?.id === userId ? (
+                      <div className="absolute bottom-1 right-1 flex gap-1">
                         <Button
-                          className="opacity-75 hover:opacity-100 hover:bg-maroon hover:text-white bg-maroon text-white"
-                          variant={'outline'}
-                          onClick={() => handleDeleteClick(id)}
-                        >
-                          Delete
-                        </Button>
-                      ) : (
-                        <Button
-                          className="opacity-75 hover:opacity-100 hover:bg-maroon hover:text-white bg-maroon text-white"
+                          className="opacity-75 hover:opacity-100"
                           variant={'outline'}
                           onClick={() => {
-                            // Perform the delete
                             submit(
-                              { _action: 'delete', postId: id },
-                              { method: 'delete' }
+                              { _action: 'edit', postId: id },
+                              { method: 'post' }
                             )
-                            // Remove from pending set immediately
-                            setPendingDelete(prev => {
-                              const newSet = new Set(prev)
-                              newSet.delete(id)
-                              return newSet
-                            })
                           }}
                         >
-                          I'm sure I want to delete
+                          Edit
                         </Button>
-                      )}
-                    </div>
-                  ) : null}
-                </div>
-              )}
-            </div>
-          )
-        })}
-    </section>
+                        {/* Button for initial delete select*/}
+                        {!pendingDelete.has(id) ? (
+                          <Button
+                            className="opacity-75 hover:opacity-100 hover:bg-maroon hover:text-white bg-maroon text-white"
+                            variant={'outline'}
+                            onClick={() => handleDeleteClick(id)}
+                          >
+                            Delete
+                          </Button>
+                        ) : (
+                          <Button
+                            className="opacity-75 hover:opacity-100 hover:bg-maroon hover:text-white bg-maroon text-white"
+                            variant={'outline'}
+                            onClick={() => {
+                              // Perform the delete
+                              submit(
+                                { _action: 'delete', postId: id },
+                                { method: 'delete' }
+                              )
+                              // Remove from pending set immediately
+                              setPendingDelete(prev => {
+                                const newSet = new Set(prev)
+                                newSet.delete(id)
+                                return newSet
+                              })
+                            }}
+                          >
+                            I'm sure I want to delete
+                          </Button>
+                        )}
+                      </div>
+                    ) : null}
+                  </div>
+                )}
+              </div>
+            )
+          })}
+      </section>
+    </>
   )
 }

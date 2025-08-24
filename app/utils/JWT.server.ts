@@ -4,7 +4,6 @@ import { createCookieSessionStorage } from 'react-router'
 import { db } from '~/db'
 import { users } from '~/db/schema'
 import { eq } from 'drizzle-orm'
-import type { UserObject } from './googleAuth.server'
 
 export function createSessionHelpers() {
   if (!process.env.SESSION_SECRET) {
@@ -16,7 +15,7 @@ export function createSessionHelpers() {
         name: 'auth_session',
         httpOnly: true,
         path: '/',
-        maxAge: 60 * 60, // 1 hour in seconds (!set to 60 * 60)
+        maxAge: 60 * 60,
         sameSite: 'lax',
         secrets: [process.env.SESSION_SECRET], // for session signing
         secure: process.env.NODE_ENV === 'production' // allow http in dev
@@ -26,12 +25,12 @@ export function createSessionHelpers() {
 }
 
 // Create signed JWT for user
-function createToken(googleId: string, role?: string) {
+function createToken(userId: string) {
   if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET required in ENV file')
   }
 
-  return jwt.sign({ googleId, role }, process.env.JWT_SECRET, {
+  return jwt.sign({ userId }, process.env.JWT_SECRET, {
     expiresIn: '1h'
   })
 }
@@ -44,10 +43,9 @@ export function decodeToken(token: string) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    if (typeof decoded === 'object' && decoded && 'googleId' in decoded) {
+    if (typeof decoded === 'object' && decoded && 'userId' in decoded) {
       return {
-        googleId: decoded.googleId as string,
-        role: decoded.role as string | undefined
+        userId: decoded.userId as string
       }
     }
     return undefined
@@ -58,9 +56,9 @@ export function decodeToken(token: string) {
 }
 
 // Create a session and store it as a cookie
-export async function storeUserSession(googleId: string, role?: string) {
+export async function storeUserSession(userId: string) {
   const { getSession, commitSession } = createSessionHelpers()
-  const token = createToken(googleId, role)
+  const token = createToken(userId)
   const session = await getSession()
   session.set('jwt', token)
   return await commitSession(session)
@@ -90,12 +88,16 @@ export async function getUserDataFromSession(cookieHeader?: string) {
       role: users.role
     })
     .from(users)
-    .where(eq(users.googleId, decoded.googleId))
+    .where(eq(users.id, decoded.userId))
     .get()
 
   if (!user) return undefined
-  if (user.status !== 'active') return undefined // banned or disabled
-
+  if (user.status !== 'active') {
+    // banned or disabled
+    console.log('user is banned. Destroying session', user)
+    await destroyUserSession(cookieHeader)
+    return undefined
+  }
   return user
 }
 
@@ -110,17 +112,7 @@ export async function getUserIdFromSession(cookieHeader?: string) {
   const decoded = decodeToken(token)
   if (!decoded) return undefined
 
-  // Get user from DB
-  const user = await db
-    .select({ id: users.id, status: users.status })
-    .from(users)
-    .where(eq(users.googleId, decoded.googleId))
-    .get()
-
-  if (!user) return undefined
-  if (user.status !== 'active') return undefined // banned or disabled
-
-  return { id: user.id }
+  return { id: decoded.userId }
 }
 
 // Remove user JWT cookie
@@ -128,11 +120,4 @@ export async function destroyUserSession(cookieHeader: string | null) {
   const { getSession, destroySession } = createSessionHelpers()
   const session = await getSession(cookieHeader)
   return await destroySession(session)
-}
-
-export async function banUser(userId: string) {
-  await db
-    .update(users)
-    .set({ status: 'disabled', role: 'banned' })
-    .where(eq(users.id, userId))
 }

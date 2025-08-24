@@ -2,7 +2,6 @@ import { OAuth2Client } from 'google-auth-library'
 import { db } from '../db'
 import { users } from '../db/schema'
 import { eq } from 'drizzle-orm'
-import jwt from 'jsonwebtoken'
 import { isAdminUser } from './admin.server'
 
 export type UserObject = {
@@ -159,26 +158,5 @@ export async function handleGoogleOAuth(code: string) {
       role: admin ? 'admin' : 'user'
     })
   }
-
   return profile
-}
-
-export async function verifyUserJWT(token: string) {
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
-      googleId: string
-    }
-    const user = await db
-      .select()
-      .from(users)
-      .where(eq(users.googleId, decoded.googleId))
-      .get()
-
-    if (!user) return { ok: false, reason: 'User not found' }
-    if (user.status !== 'active') return { ok: false, reason: 'User disabled' }
-
-    return { ok: true, user }
-  } catch {
-    return { ok: false, reason: 'Invalid token' }
-  }
 }

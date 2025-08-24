@@ -25,16 +25,12 @@ export default function Navbar() {
             </NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="w-64">
-                <Link to="/about">
-                  <NavigationMenuLink className="hover:bg-lilac/75">
-                    Carol's Life
-                  </NavigationMenuLink>
-                </Link>
-                <Link to="/memorial">
-                  <NavigationMenuLink className="hover:bg-lilac/75">
-                    Memorial Fund
-                  </NavigationMenuLink>
-                </Link>
+                <NavigationMenuLink asChild className="hover:bg-lilac/75">
+                  <Link to="/about">Carol's Life</Link>
+                </NavigationMenuLink>
+                <NavigationMenuLink asChild className="hover:bg-lilac/75">
+                  <Link to="/memorial">Memorial Fund</Link>
+                </NavigationMenuLink>
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
@@ -45,33 +41,51 @@ export default function Navbar() {
             <NavigationMenuContent>
               <ul className="w-64">
                 <h2 className="text-sm p-2 pb-0 font-semibold">Articles</h2>
-                <a href="https://www.hudsonstarobserver.com/obituaries/carol-ann-trainor/article_170650eb-7da0-5e91-8921-bc94149ea1cb.html">
-                  <NavigationMenuLink className="hover:bg-lilac/75">
+                <NavigationMenuLink asChild className="hover:bg-lilac/75">
+                  <a
+                    href="https://www.hudsonstarobserver.com/obituaries/carol-ann-trainor/article_170650eb-7da0-5e91-8921-bc94149ea1cb.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Star-Observer: Obituary
-                  </NavigationMenuLink>
-                </a>
-                <a href="https://www.hudsonstarobserver.com/obituaries/remembering-carol-trainor-a-community-involved-restaurateur-whose-community-returned-the-favor/article_e13d2854-6b76-4ddb-882c-6eafb8001394.html">
-                  <NavigationMenuLink className="hover:bg-lilac/75">
+                  </a>
+                </NavigationMenuLink>
+                <NavigationMenuLink asChild className="hover:bg-lilac/75">
+                  <a
+                    href="https://www.hudsonstarobserver.com/obituaries/remembering-carol-trainor-a-community-involved-restaurateur-whose-community-returned-the-favor/article_e13d2854-6b76-4ddb-882c-6eafb8001394.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Star-Observer: Remembering Carol
-                  </NavigationMenuLink>
-                </a>
+                  </a>
+                </NavigationMenuLink>
                 <Separator />
                 <h2 className="text-sm p-2 pb-0 font-semibold">
                   Urban Olive and Vine
                 </h2>
-
-                <a href="https://urbanoliveandvine.com/">
-                  <NavigationMenuLink className="hover:bg-lilac/75">
+                <NavigationMenuLink asChild className="hover:bg-lilac/75">
+                  <a
+                    href="https://urbanoliveandvine.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Website
-                  </NavigationMenuLink>
-                </a>
-                <a href="https://www.instagram.com/urbanoliveandvine/">
-                  <NavigationMenuLink className="hover:bg-lilac/75">
+                  </a>
+                </NavigationMenuLink>
+                <NavigationMenuLink asChild className="hover:bg-lilac/75">
+                  <a
+                    href="https://www.instagram.com/urbanoliveandvine/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Instagram
-                  </NavigationMenuLink>
-                </a>
-
-                <a href="https://www.facebook.com/urbanoliveandvine">
+                  </a>
+                </NavigationMenuLink>
+                <a
+                  href="https://www.facebook.com/urbanoliveandvine"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <NavigationMenuLink className="hover:bg-lilac/75">
                     Facebook
                   </NavigationMenuLink>
@@ -85,21 +99,25 @@ export default function Navbar() {
             </NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="w-64">
-                <NavigationMenuLink className="hover:bg-lilac/75">
-                  PayPal
+                <NavigationMenuLink asChild className="hover:bg-lilac/75">
+                  <a
+                    href="https://www.paypal.com/paypalme/JChadTrainor"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Paypal
+                  </a>
                 </NavigationMenuLink>
-                <NavigationMenuLink className="hover:bg-lilac/75">
-                  Other payments
+                <NavigationMenuLink asChild className="hover:bg-lilac/75">
+                  <Link to="/donate">Other payments</Link>
                 </NavigationMenuLink>
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
-          <Link to="/gallery">
-            <NavigationMenuItem className="px-4 py-2 text-sm font-medium">
-              Gallery
-            </NavigationMenuItem>
-          </Link>
-          <NavigationMenuItem className="px-4 py-2 text-sm font-medium">
+          <NavigationMenuItem asChild className="px-4 py-2 text-sm font-medium">
+            <Link to="/gallery">Gallery</Link>
+          </NavigationMenuItem>
+          <NavigationMenuItem asChild className="px-4 py-2 text-sm font-medium">
             <Link to="/#contact">CONTACT</Link>
           </NavigationMenuItem>
         </NavigationMenuList>

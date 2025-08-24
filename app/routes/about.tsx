@@ -1,4 +1,15 @@
 import { Button } from '~/components/ui/button'
+import type { Route } from '../+types/root'
+
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: 'About – Carol Trainor' },
+    {
+      name: 'description',
+      content: "Carol's biography and legacy."
+    }
+  ]
+}
 
 export default function about() {
   return (
@@ -158,7 +169,11 @@ export default function about() {
         </p>
         <div className="flex gap-2">
           <Button>
-            <a href="https://www.hudsonstarobserver.com/obituaries/carol-ann-trainor/article_170650eb-7da0-5e91-8921-bc94149ea1cb.html">
+            <a
+              href="https://www.hudsonstarobserver.com/obituaries/carol-ann-trainor/article_170650eb-7da0-5e91-8921-bc94149ea1cb.html"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Star-Observer Obituary
             </a>
           </Button>

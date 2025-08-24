@@ -1,6 +1,6 @@
 import { getUserDataFromSession } from '~/utils/JWT.server'
 import type { Route } from './+types/admin'
-import { data, redirect, useNavigate } from 'react-router'
+import { data, Link, redirect, useNavigate } from 'react-router'
 import { db } from '~/db'
 import { posts, users } from '~/db/schema'
 import { eq } from 'drizzle-orm'
@@ -72,6 +72,13 @@ export async function action({ request }: Route.ActionArgs) {
       if (!restoredPost)
         throw new Response('Post not restored', { status: 500 })
       break
+    case 'hardDeletePost':
+      if (!targetPostId) throw new Response('No target userId', { status: 400 })
+      const hardDeletedPost = await db
+        .delete(posts)
+        .where(eq(posts.id, targetPostId))
+      console.log(hardDeletedPost)
+      break
     default:
       throw new Response('Unknown action', { status: 400 })
   }
@@ -102,8 +109,10 @@ export default function AdminPage({ loaderData }: Route.ComponentProps) {
   return (
     <section className="p-8 flex flex-col gap-8">
       <div className="flex gap-2 items-center">
-        <Button variant={'link'} onClick={() => navigate('/gallery')}>
-          <ArrowLeft />
+        <Button size={'icon'} variant={'link'} asChild>
+          <Link to="/gallery">
+            <ArrowLeft />
+          </Link>
         </Button>
         <h1 className="text-4xl font-bold">Admin Dashboard</h1>
       </div>
@@ -250,6 +259,17 @@ export default function AdminPage({ loaderData }: Route.ComponentProps) {
                     <input type="hidden" name="postId" value={p.posts.id} />
                     <Button type="submit" className="bg-green-500">
                       Restore Post
+                    </Button>
+                  </form>
+                  <form method="post">
+                    <input
+                      type="hidden"
+                      name="_action"
+                      value="hardDeletePost"
+                    />
+                    <input type="hidden" name="postId" value={p.posts.id} />
+                    <Button type="submit" className="bg-red-500">
+                      Delete Permanently
                     </Button>
                   </form>
                 </div>

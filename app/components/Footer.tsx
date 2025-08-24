@@ -29,12 +29,16 @@ export default function Footer() {
             <a
               className="text-sm hover:underline underline-offset-3"
               href="https://www.hudsonstarobserver.com/obituaries/carol-ann-trainor/article_170650eb-7da0-5e91-8921-bc94149ea1cb.html"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Star-Observer: Obituary
             </a>
             <a
               className="text-sm hover:underline underline-offset-3"
               href="https://www.hudsonstarobserver.com/obituaries/remembering-carol-trainor-a-community-involved-restaurateur-whose-community-returned-the-favor/article_e13d2854-6b76-4ddb-882c-6eafb8001394.html"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Star-Observer: Remembering Carol
             </a>
@@ -42,6 +46,8 @@ export default function Footer() {
             <a
               className="text-sm hover:underline underline-offset-3"
               href="https://urbanoliveandvine.com/"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Urban Olive and Vine
             </a>

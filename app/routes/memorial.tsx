@@ -3,6 +3,17 @@ import type { Route } from './+types/memorial'
 import { Separator } from '~/components/ui/separator'
 import { Button } from '~/components/ui/button'
 
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: 'Memorial – Carol Trainor' },
+    {
+      name: 'description',
+      content:
+        "Information regarding the memorial fund established in Carol's memory."
+    }
+  ]
+}
+
 export async function loader() {
   return await getBasicCampaignData()
 }

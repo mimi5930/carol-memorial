@@ -64,6 +64,13 @@
       "when": 1755367184732,
       "tag": "0008_plain_grey_gargoyle",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1756069164972,
+      "tag": "0009_tearful_scream",
+      "breakpoints": true
     }
   ]
 }
