@@ -12,8 +12,17 @@ export type UserObject = {
   family_name?: string
   picture: string
   id: string
-  status: string
-  role: string
+  status: 'active' | 'disabled'
+  role: 'user' | 'admin'
+}
+
+export type GoogleAuthResponse = {
+  sub: string
+  email: string
+  name: string
+  given_name?: string
+  family_name?: string
+  picture: string
 }
 
 type ServiceResult<T> =
@@ -63,7 +72,7 @@ export async function createAuthorizeUrl(): Promise<
 
 export async function getAuthorizedUserData(
   code?: string | undefined
-): Promise<ServiceResult<UserObject>> {
+): Promise<ServiceResult<GoogleAuthResponse>> {
   // get code from client
   if (!code) return createError(400, 'Missing authorization code')
   if (!process.env.REDIRECT_URL)
@@ -89,7 +98,7 @@ export async function getAuthorizedUserData(
 
 async function getGoogleUserData(
   access_token?: string
-): Promise<ServiceResult<UserObject>> {
+): Promise<ServiceResult<GoogleAuthResponse>> {
   if (!access_token) return createError(400, 'Missing access token')
   // send our token to google
   try {
@@ -100,7 +109,7 @@ async function getGoogleUserData(
     if (!res.ok) {
       return createError(res.status, `Google API error: ${res.statusText}`)
     }
-    const userData: UserObject = await res.json()
+    const userData: GoogleAuthResponse = await res.json()
     return { ok: true, data: userData }
   } catch (error) {
     console.error('Error fetching user data:', error)
@@ -128,6 +137,8 @@ export async function handleGoogleOAuth(code: string) {
 
   const { sub, email, name, picture } = profile.data
 
+  let userData
+
   const existingUser = await db
     .select()
     .from(users)
@@ -135,28 +146,39 @@ export async function handleGoogleOAuth(code: string) {
     .get()
 
   if (existingUser) {
-    console.log('existing user found!', existingUser)
+    const { id, name, picture, role } = existingUser
     await db
       .update(users)
       .set({
-        email: email,
-        name: name,
-        picture: picture,
         lastLoginAt: new Date().toISOString()
       })
       .where(eq(users.googleId, sub))
+    userData = { id, name, picture, role }
   } else {
-    console.log('user not found and added', existingUser)
     // check if id is on the whitelist
     const admin = isAdminUser(sub)
-    await db.insert(users).values({
-      googleId: sub,
-      email: email,
-      name: name,
-      picture: picture,
-      lastLoginAt: new Date().toISOString(),
-      role: admin ? 'admin' : 'user'
-    })
+    try {
+      const newUser = await db
+        .insert(users)
+        .values({
+          googleId: sub,
+          email: email,
+          name: name,
+          picture: picture,
+          lastLoginAt: new Date().toISOString(),
+          role: admin ? 'admin' : 'user'
+        })
+        .returning({
+          id: users.id,
+          name: users.name,
+          picture: users.picture,
+          role: users.role
+        })
+      userData = newUser[0]
+    } catch (error) {
+      console.log('error in adding new User')
+      return createError(500, 'Internal error adding user')
+    }
   }
-  return profile
+  return { ok: true, data: userData }
 }

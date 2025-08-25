@@ -51,6 +51,7 @@ import { headerLilacImg } from '~/assets'
 async function checkCookiesForUserInfo(request: Request) {
   // See if user is stored in the session
   const cookie = request.headers.get('Cookie')
+  console.log({ cookie })
   if (!cookie) return undefined
 
   return await getUserDataFromSession(cookie)
@@ -73,6 +74,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   let user = await checkCookiesForUserInfo(request)
   // query search params for 'code' field from google auth
   const code = new URL(request.url).searchParams.get('code')
+  console.log('user', user)
 
   // See if user was redirected from google auth
   if (!user && code) {
@@ -80,7 +82,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     // set user value to oAuth values and store in session memory
     if (profile.ok) {
       user = profile.data
-      setCookieHeader = await storeUserSession(profile.data.sub)
+      setCookieHeader = await storeUserSession(profile.data.id)
 
       // Remove ?code from URL to prevent "invalid_grant" on refresh
       return redirect('/gallery', {
@@ -239,10 +241,11 @@ export async function action({ request }: Route.ActionArgs) {
 
       if (!postId) throw new Response('Bad Request', { status: 400 })
 
-      const [post] = await db
+      const post = await db
         .select()
         .from(posts)
         .where(eq(posts.userId, user.id))
+        .get()
 
       if (!post || (post.userId !== user.id && user)) {
         throw new Response('Forbidden', { status: 403 })
@@ -284,6 +287,7 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
     postId?: string
   }>()
   console.log(actionData)
+  console.log('loaderData', loaderData)
 
   const fetcher = useFetcher()
   // const userInfo = sampleUserInfo
@@ -294,6 +298,19 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
   const form = useForm<z.infer<typeof memoryFormSchema>>({
     resolver: zodResolver(memoryFormSchema)
   })
+
+  const handleFormSubmit = (value: { message: string }) => {
+    if (!loaderData.userData) {
+      form.setError('message', {
+        message: 'Please sign in to submit this memory'
+      })
+      return
+    }
+    submit(
+      { ...value, _action: 'formSubmit' },
+      { action: '/gallery', method: 'post' }
+    )
+  }
 
   const updateForm = useForm<z.infer<typeof memoryFormSchema>>({
     resolver: zodResolver(memoryFormSchema)
@@ -432,12 +449,7 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
             )}
             <Form {...form}>
               <fetcher.Form
-                onSubmit={form.handleSubmit(value => {
-                  submit(
-                    { ...value, _action: 'formSubmit' },
-                    { action: '/gallery', method: 'post' }
-                  )
-                })}
+                onSubmit={form.handleSubmit(handleFormSubmit)}
                 className="w-full"
               >
                 <FormField

@@ -93,12 +93,11 @@ export default function AdminPage({ loaderData }: Route.ComponentProps) {
 
   let posts: typeof postsData = []
   let deletedPosts: typeof postsData = []
-  postsData.forEach(p => {
-    p.posts.deletedAt === null ? posts.push(p) : deletedPosts.push(p)
-  })
-  console.log(postsData[0].posts.deletedAt)
-  console.log({ posts })
-  console.log({ deletedPosts })
+  if (postsData) {
+    postsData.forEach(p => {
+      p.posts.deletedAt === null ? posts.push(p) : deletedPosts.push(p)
+    })
+  }
 
   const [showUsers, setShowUsers] = useState<boolean>(true)
   const [showPosts, setShowPosts] = useState<boolean>(true)

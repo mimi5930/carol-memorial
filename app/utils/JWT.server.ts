@@ -35,7 +35,7 @@ function createToken(userId: string) {
   })
 }
 
-// Decode a JWT and return googleId + role
+// Decode a JWT and return userId
 export function decodeToken(token: string) {
   if (!process.env.JWT_SECRET) {
     throw new Error('Secret needed to validate JWT')
@@ -43,6 +43,7 @@ export function decodeToken(token: string) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
     if (typeof decoded === 'object' && decoded && 'userId' in decoded) {
       return {
         userId: decoded.userId as string
@@ -70,6 +71,7 @@ export async function getUserDataFromSession(cookieHeader?: string) {
   if (!cookieHeader) return undefined
 
   const session = await getSession(cookieHeader)
+
   const token = session.get('jwt')
   if (!token) return undefined
 
@@ -80,8 +82,6 @@ export async function getUserDataFromSession(cookieHeader?: string) {
   const user = await db
     .select({
       id: users.id,
-      sub: users.googleId,
-      email: users.email,
       name: users.name,
       picture: users.picture,
       status: users.status,
@@ -98,7 +98,12 @@ export async function getUserDataFromSession(cookieHeader?: string) {
     await destroyUserSession(cookieHeader)
     return undefined
   }
-  return user
+  return {
+    id: user.id,
+    name: user.name,
+    picture: user.picture,
+    role: user.role
+  }
 }
 
 export async function getUserIdFromSession(cookieHeader?: string) {
