@@ -11,14 +11,15 @@ export function meta({}: Route.MetaArgs) {
   ]
 }
 
-export default function about() {
+export default function About() {
   return (
-    <section className="flex flex-col items-center pt-8">
-      <article className="flex flex-col gap-8 w-7xl text-lg bg-slate-50 rounded-md p-8 shadow-md">
-        <h2 className="font-ephesis text-7xl text-maroon font-extrabold py-12 self-center">
-          Remembering Carol's Life
+    <section className="flex flex-col items-center pt-6 sm:pt-8 px-4">
+      <article className="flex flex-col gap-6 sm:gap-8 w-full max-w-7xl text-base sm:text-lg bg-slate-50 rounded-md p-4 sm:p-8 shadow-md">
+        <h2 className="font-ephesis text-4xl sm:text-7xl text-maroon font-extrabold py-6 sm:py-12 text-center">
+          Remembering Carol&apos;s Life
         </h2>
-        {/* TODO: Add text */}
+
+        {/* Biography */}
         <p>
           Carol Ann Trainor (née Weiher) was a remarkable woman whose warmth,
           creativity, and dedication to others left an indelible mark on her
@@ -94,25 +95,16 @@ export default function about() {
           deeply.
         </p>
       </article>
-      {/* TODO: Add Timeline */}
-      {/* <article className="flex flex-col w-7xl bg-slate-50 mt-8 rounded-md shadow-md">
-        <h2 className="font-ephesis text-7xl font-extrabold py-12 self-center">
-          Carol's Timeline
-        </h2>
-        <div className="px-2 flex">
-          <div className="bg-fuchsia-400 size-28 rounded-md shadow flex flex-col justify-center items-center">
-            <h3>Born</h3>
-            <h3>1966</h3>
-          </div>
-        </div>
-      </article> */}
+
+      {/* Obituary */}
       <article
         id="obituary"
-        className="flex flex-col w-7xl bg-slate-50 mt-8 rounded-md shadow-md p-8 mb-8 gap-8 text-lg"
+        className="flex flex-col w-full max-w-7xl bg-slate-50 mt-6 sm:mt-8 rounded-md shadow-md p-4 sm:p-8 mb-6 sm:mb-8 gap-6 sm:gap-8 text-base sm:text-lg"
       >
-        <h2 className="font-ephesis text-7xl text-maroon font-extrabold py-12 self-center">
-          Carol's Obituary
+        <h2 className="font-ephesis text-4xl sm:text-7xl text-maroon font-extrabold py-6 sm:py-12 text-center">
+          Carol&apos;s Obituary
         </h2>
+
         <p>
           Carol A. Trainor, age 58, of Hudson, Wisconsin, passed away on May 5,
           2025. Carol was born October 20, 1966 in St. Paul, MN to Richard and
@@ -167,8 +159,9 @@ export default function about() {
           which will be for the purpose of giving back to the Hudson Area
           community in her memory.
         </p>
-        <div className="flex gap-2">
-          <Button>
+
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+          <Button asChild>
             <a
               href="https://www.hudsonstarobserver.com/obituaries/carol-ann-trainor/article_170650eb-7da0-5e91-8921-bc94149ea1cb.html"
               target="_blank"
@@ -177,7 +170,6 @@ export default function about() {
               Star-Observer Obituary
             </a>
           </Button>
-          {/* TODO: Add functionality */}
           <Button>Memorial Fund</Button>
         </div>
       </article>

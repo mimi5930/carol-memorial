@@ -18,11 +18,11 @@ export default function Donations() {
   return (
     <>
       {/* Hero Section */}
-      <header className="h-[28rem] relative">
+      <header className="h-[28rem] relative border-b-[1rem] border-maroon">
         <img
           src={headerLilacImg}
           alt=""
-          className="w-full h-full object-cover object-top border-b-[1rem] border-maroon shadow-lg"
+          className="w-full h-full object-cover object-top  shadow-lg"
         />
         <div className="absolute inset-0 flex flex-col justify-center items-center bg-accent/70">
           <h1 className="font-ephesis text-6xl font-extrabold text-sandy-brown text-shadow-md text-shadow-black">

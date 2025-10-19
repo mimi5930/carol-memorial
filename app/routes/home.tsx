@@ -128,7 +128,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             {/* Glimpse of life */}
             <section className="py-8 sm:py-12">
               <div className="max-w-5xl mx-auto">
-                <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-slate-800 mb-4 sm:mb-6">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-800 mb-4 sm:mb-6">
                   A Glimpse of Carol’s Life
                 </h2>
                 <p className="text-slate-600 mb-6 sm:mb-10 max-w-2xl">
@@ -213,7 +213,9 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             </h2>
             <p>
               Carol's family asks for you to please make a donation to{' '}
-              <a className="underline">Carol's Memorial Fund.</a>
+              <Link to="/memorial" className="underline">
+                Carol's Memorial Fund.
+              </Link>
             </p>
             <p>
               This fund has been thoughtfully established as a way to extend the
@@ -256,14 +258,16 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 </Fragment>
               )
             })}
-            <Button className="w-full sm:w-auto">Contribute</Button>
+            <Button className="w-full sm:w-auto" asChild>
+              <Link to="/donate">Contribute</Link>
+            </Button>
           </div>
         </section>
       </main>
 
       <section className="flex flex-col items-center pt-8" id="contact">
         <article className="flex flex-col gap-8 w-full text-lg bg-slate-50 p-8 shadow-md py-16 relative border-t-[0.5rem] md:border-t-[1rem] border-maroon">
-          <h2 className="font-ephesis text-7xl font-extrabold py-12 self-center z-10">
+          <h2 className="font-ephesis text-7xl font-extrabold py-12 self-center z-10 text-center">
             Reach Out to Carol's Family
           </h2>
           <div className="flex justify-center z-10">
@@ -312,7 +316,11 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                     </FormItem>
                   )}
                 />
-                <Button type="submit">Submit</Button>
+                <div className="w-full">
+                  <Button className="md:w-auto w-full" type="submit">
+                    Submit
+                  </Button>
+                </div>
               </form>
             </Form>
           </div>

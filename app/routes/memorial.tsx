@@ -18,17 +18,19 @@ export async function loader() {
   return await getBasicCampaignData()
 }
 
-export default function memorial({ loaderData }: Route.ComponentProps) {
+export default function Memorial({ loaderData }: Route.ComponentProps) {
   const { amount_raised_unattributed, total_unique_donors } =
     loaderData.references.counts
+
   return (
-    <section className="flex flex-col items-center py-8">
-      <article className="flex flex-col gap-18 w-7xl text-lg bg-slate-50 rounded-md p-8 shadow-md pb-24">
-        <h2 className="font-ephesis text-maroon text-7xl font-extrabold py-12 text-center">
+    <section className="flex flex-col items-center py-6 sm:py-8 px-4">
+      <article className="flex flex-col gap-6 sm:gap-10 w-full max-w-7xl text-base sm:text-lg bg-slate-50 rounded-md p-4 sm:p-8 shadow-md pb-12 sm:pb-24">
+        <h2 className="font-ephesis text-maroon text-3xl sm:text-7xl font-extrabold py-6 sm:py-12 text-center">
           Honoring the Legacy of Carol Trainor: A Memorial Fund of Hope and
           Healing
         </h2>
-        <h3 className="text-3xl font-bold">
+
+        <h3 className="text-2xl sm:text-3xl font-bold">
           A Journey Marked by Resilience, Strength, and Unanswered Questions
         </h3>
         <p>
@@ -45,7 +47,8 @@ export default function memorial({ loaderData }: Route.ComponentProps) {
           family and her community never wavered, even as she faced this
           terrifying health crisis.
         </p>
-        <h3 className="text-3xl font-bold">
+
+        <h3 className="text-2xl sm:text-3xl font-bold">
           The Unbreakable Bond of Family and Community Support
         </h3>
         <p>
@@ -72,17 +75,18 @@ export default function memorial({ loaderData }: Route.ComponentProps) {
         <p>
           Beyond her family, the Hudson community rallied around Carol and her
           loved ones, providing support in any way they could. From donations to
-          emotional encouragement, the community's response was a testament to
-          the mark Carol had left on those around her. As a key figure at Urban
-          Olive and Vine, Carol was more than just a familiar face; she was a
-          friend, mentor, and pillar of the community. Her kindness, work ethic,
-          and dedication to helping others made her a beloved member of Hudson.
-          As her health took its toll, this same community stepped up to help
-          Carol and her family with the same love and generosity Carol had
+          emotional encouragement, the community&apos;s response was a testament
+          to the mark Carol had left on those around her. As a key figure at
+          Urban Olive and Vine, Carol was more than just a familiar face; she
+          was a friend, mentor, and pillar of the community. Her kindness, work
+          ethic, and dedication to helping others made her a beloved member of
+          Hudson. As her health took its toll, this same community stepped up to
+          help Carol and her family with the same love and generosity Carol had
           always shown them.
         </p>
-        <h3 className="text-3xl font-bold">
-          A Memorial Fund to Continue Carol's Legacy of Care and Compassion
+
+        <h3 className="text-2xl sm:text-3xl font-bold">
+          A Memorial Fund to Continue Carol&apos;s Legacy of Care and Compassion
         </h3>
         <p>
           In honor of Carol&apos;s life and the profound impact she had on those
@@ -104,44 +108,29 @@ export default function memorial({ loaderData }: Route.ComponentProps) {
           hope and assistance to those who find themselves in the midst of an
           uncertain medical journey, just as Carol did.
         </p>
-        <h3 className="text-3xl font-bold">
-          A Memorial Fund to Continue Carol's Legacy of Care and Compassion
+
+        <h3 className="text-2xl sm:text-3xl font-bold">
+          A Memorial Fund to Continue Carol&apos;s Legacy of Care and Compassion
         </h3>
         <p className="font-bold">
           The Carol A. Trainor Memorial Fund will focus on providing:
         </p>
         <ul className="list-disc list-outside pl-5">
+          <li>Financial assistance for medical care.</li>
+          <li>Support for caregiving families, including respite care.</li>
+          <li>Bereavement support and counseling resources.</li>
           <li>
-            Financial assistance for medical care, helping to alleviate the
-            burden of healthcare costs for families facing serious illness.
-          </li>
-          <li>
-            Support for caregiving families, including respite care and
-            transportation to medical appointments, ensuring that families like
-            Carol&apos;s can receive the help they need during difficult times.
-          </li>
-          <li>
-            Bereavement support, offering counseling and emotional resources for
-            those navigating the grief that often accompanies the loss of a
-            loved one.
-          </li>
-          <li>
-            Youth mentorship and community engagement programs at Urban Olive
-            and Vine and other local initiatives, in honor of Carol&apos;s
-            commitment to mentoring young people and giving back to the
-            community.
+            Youth mentorship and community engagement programs, in honor of
+            Carol&apos;s commitment to mentoring.
           </li>
         </ul>
         <p>
           By establishing this fund, Carol&apos;s family hopes to create a
           lasting impact that reflects the values Carol held dear: compassion,
           community, and the unwavering support of those who love you.
-          Carol&apos;s passing has left an irreplaceable void, but her legacy
-          will live on through this fund—ensuring that others will receive the
-          care, love, and support that Carol was fortunate enough to experience
-          in her own life.
         </p>
-        <h3 className="text-3xl font-bold">
+
+        <h3 className="text-2xl sm:text-3xl font-bold">
           Giving Back to the Community Carol Loved
         </h3>
         <p>
@@ -159,35 +148,37 @@ export default function memorial({ loaderData }: Route.ComponentProps) {
           lives on, offering hope and assistance to those in need in Hudson and
           beyond.
         </p>
-        <Separator className="my-12" />
-        <h3 className="text-3xl font-bold text-center">
+
+        <Separator className="my-8 sm:my-12" />
+
+        <h3 className="text-2xl sm:text-3xl font-bold text-center">
           Thanks to the loving support of the community,
         </h3>
-        <p className="text-center text-6xl font-bold text-maroon">
+        <p className="text-center text-4xl sm:text-6xl font-bold text-maroon">
           ${amount_raised_unattributed.toLocaleString('en-US')}
         </p>
-        <p className="text-center font-bold text-3xl">
+        <p className="text-center font-bold text-2xl sm:text-3xl">
           has been contributed so far by{' '}
-          <span className="text-5xl text-maroon">
+          <span className="text-3xl sm:text-5xl text-maroon">
             {total_unique_donors.toLocaleString('en-US')}
           </span>{' '}
           people.
         </p>
+
         <p>
           Every donation, no matter how small, makes a meaningful difference.
-          Whether it&apos;s a few dollars or a larger gift, your support helps
-          carry out the mission of this fund—offering real, tangible help to
-          individuals and families facing medical hardships. These contributions
-          go directly toward easing the burden for those navigating uncertainty,
-          just as Carol and her family once did. Each act of generosity becomes
-          a ripple of hope, compassion, and care—extending Carol&apos;s legacy
-          in the most heartfelt way.
+          Your support helps carry out the mission of this fund—offering real,
+          tangible help to individuals and families facing medical hardships.
         </p>
-        <h3 className="text-3xl font-bold text-center">
+
+        <h3 className="text-2xl sm:text-3xl font-bold text-center">
           Make your contribution here
         </h3>
-        {/* TODO: Add functionality */}
-        <Button>Donate</Button>
+
+        {/* Donate button */}
+        <div className="flex justify-center">
+          <Button>Donate</Button>
+        </div>
       </article>
     </section>
   )

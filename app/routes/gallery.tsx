@@ -7,7 +7,7 @@ import {
 } from '~/components/ui/carousel'
 import { db } from '~/db'
 import { posts, users } from '~/db/schema'
-import { eq, desc, asc, and, isNull, sql } from 'drizzle-orm'
+import { eq, desc, and, isNull, sql } from 'drizzle-orm'
 // import seedData from '~/db/seed'
 import type { Route } from './+types/gallery'
 import {
@@ -18,7 +18,7 @@ import {
   FormMessage
 } from '~/components/ui/form'
 import { useForm } from 'react-hook-form'
-import { memoryFormSchema, memoryFormUpdateSchema } from '~/lib/formSchema'
+import { memoryFormSchema } from '~/lib/formSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type z from 'zod'
 import { Textarea } from '~/components/ui/textarea'
@@ -39,7 +39,6 @@ import {
   createAuthorizeUrl,
   handleGoogleOAuth
 } from '~/utils/googleAuth.server'
-// import sampleUserInfo from '../../sampleUserInfo.json'
 import {
   destroyUserSession,
   getUserDataFromSession,
@@ -92,7 +91,6 @@ export async function loader({ request }: Route.LoaderArgs) {
   }
 
   // Get posts from db
-  // await seedData()
   try {
     const postArray = await db
       .select({
@@ -214,9 +212,7 @@ export async function action({ request }: Route.ActionArgs) {
         }
       }
 
-      const postDbResponse = await db
-        .insert(posts)
-        .values({ text: message, userId: user.id })
+      await db.insert(posts).values({ text: message, userId: user.id })
 
       return new Response(JSON.stringify({ success: true }), {
         status: 200,
@@ -338,7 +334,7 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
     }
 
     if (actionData?.success) {
-      form.reset()
+      form.reset({ message: '' })
     }
 
     if (actionData?.editPostAuth && actionData.postId) {
