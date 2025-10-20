@@ -60,23 +60,31 @@ export default function Footer() {
           {/* Donate */}
           <div className="flex flex-col gap-2">
             <h3 className="font-bold text-xl">DONATE</h3>
-            <Link to="/" className="text-sm hover:underline underline-offset-3">
+            <a
+              href="https://paypal.me/JChadTrainor"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm hover:underline underline-offset-3"
+            >
               Paypal
-            </Link>
-            <Link to="/" className="text-sm hover:underline underline-offset-3">
+            </a>
+            <Link
+              to="/donate"
+              className="text-sm hover:underline underline-offset-3"
+            >
               Other payments
             </Link>
           </div>
 
           {/* Gallery */}
-          <div className="flex flex-col gap-2">
+          {/* <div className="flex flex-col gap-2">
             <Link
               to="/"
               className="font-bold text-xl hover:underline underline-offset-3"
             >
               GALLERY
             </Link>
-          </div>
+          </div> */}
 
           {/* Contact */}
           <div className="flex flex-col gap-2">
