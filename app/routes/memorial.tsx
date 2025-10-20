@@ -2,6 +2,8 @@ import { getBasicCampaignData } from '~/lib/getCampaignData'
 import type { Route } from './+types/memorial'
 import { Separator } from '~/components/ui/separator'
 import { Button } from '~/components/ui/button'
+import { purpleFlowers } from '~/assets'
+import { Link } from 'react-router'
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -14,21 +16,22 @@ export function meta({}: Route.MetaArgs) {
   ]
 }
 
-export async function loader() {
-  return await getBasicCampaignData()
-}
-
-export default function Memorial({ loaderData }: Route.ComponentProps) {
-  const { amount_raised_unattributed, total_unique_donors } =
-    loaderData.references.counts
-
+export default function Memorial() {
   return (
     <section className="flex flex-col items-center py-6 sm:py-8 px-4">
       <article className="flex flex-col gap-6 sm:gap-10 w-full max-w-7xl text-base sm:text-lg bg-slate-50 rounded-md p-4 sm:p-8 shadow-md pb-12 sm:pb-24">
-        <h2 className="font-ephesis text-maroon text-3xl sm:text-7xl font-extrabold py-6 sm:py-12 text-center">
+        <h2 className="font-ephesis text-maroon text-3xl sm:text-7xl font-extrabold pt-6 sm:pt-12 text-center">
           Honoring the Legacy of Carol Trainor: A Memorial Fund of Hope and
           Healing
         </h2>
+
+        <div className="size-56 self-center">
+          <img
+            src={purpleFlowers}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        </div>
 
         <h3 className="text-2xl sm:text-3xl font-bold">
           A Journey Marked by Resilience, Strength, and Unanswered Questions
@@ -149,7 +152,7 @@ export default function Memorial({ loaderData }: Route.ComponentProps) {
           beyond.
         </p>
 
-        <Separator className="my-8 sm:my-12" />
+        {/* <Separator className="my-8 sm:my-12" />
 
         <h3 className="text-2xl sm:text-3xl font-bold text-center">
           Thanks to the loving support of the community,
@@ -173,11 +176,13 @@ export default function Memorial({ loaderData }: Route.ComponentProps) {
 
         <h3 className="text-2xl sm:text-3xl font-bold text-center">
           Make your contribution here
-        </h3>
+        </h3> */}
 
         {/* Donate button */}
         <div className="flex justify-center">
-          <Button>Donate</Button>
+          <Link to="/donate">
+            <Button>Contribute to Carol's Memorial Fund</Button>
+          </Link>
         </div>
       </article>
     </section>

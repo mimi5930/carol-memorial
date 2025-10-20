@@ -2,7 +2,12 @@ import { Fragment } from 'react'
 import type { Route } from './+types/home'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { carolHeadshot, headerLilacImg, hydrangeas } from '~/assets'
+import {
+  carolHeadshot,
+  flowerHeart,
+  headerLilacImg,
+  hydrangeas
+} from '~/assets'
 import { Button } from '~/components/ui/button'
 import { Link } from 'react-router'
 import CalendarHeart from '~/components/svg/CalendarHeart'
@@ -26,7 +31,6 @@ import {
 import { Input } from '~/components/ui/input'
 import { z } from 'zod'
 import { contactFormSchema } from '~/lib/formSchema'
-import { getCampaignData } from '~/lib/getCampaignData'
 import { Textarea } from '~/components/ui/textarea'
 
 export function meta({}: Route.MetaArgs) {
@@ -38,20 +42,12 @@ export function meta({}: Route.MetaArgs) {
     }
   ]
 }
-// loader function
-export async function loader() {
-  return await getCampaignData()
-}
 
-export default function Home({ loaderData }: Route.ComponentProps) {
+//* Default export
+export default function Home() {
   const form = useForm<z.infer<typeof contactFormSchema>>({
     resolver: zodResolver(contactFormSchema)
   })
-
-  // list of donations
-  const donationsList = loaderData[0].references.donations
-  // list of totals
-  const donationCounts = loaderData[1].references.counts
 
   // TODO: Add functionality
   function onSubmit(values: z.infer<typeof contactFormSchema>) {
@@ -96,7 +92,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         </div>
       </header>
 
-      {/* Main content */}
       {/* Main content */}
       <main className="py-12 flex justify-center">
         <section
@@ -208,6 +203,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
           {/* Right column (donations) */}
           <div className="w-full lg:w-2xl bg-slate-100 shadow-md rounded-md text-base md:text-lg/8 p-6 sm:p-8 lg:p-12 gap-6 lg:gap-8 flex flex-col">
+            <img src={flowerHeart} alt="" className="size-48 self-center" />
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold pb-4 text-center">
               Give Your Support
             </h2>
@@ -225,39 +221,18 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               of solidarity to others who may be going through similar
               experiences of loss or hardship.
             </p>
-
             <Separator />
-            <p className="text-center text-2xl sm:text-3xl font-bold">
-              $
-              {donationCounts.amount_raised_unattributed.toLocaleString(
-                'en-US'
-              )}
-            </p>
-            <p className="text-center text-lg sm:text-2xl">
-              Contributed so far by{' '}
-              <span className="font-bold">
-                {donationCounts.total_donations.toLocaleString('en-US')}
-              </span>{' '}
-              people
+            <p>
+              We invite you to contribute to the Carol Trainor Memorial Fund,
+              created to honor Carol&apos;s life, kindness, and lasting impact
+              on those who knew her. Your donation, no matter the size, will
+              help celebrate her memory and continue the work and love she
+              shared with so many. Even a small gift can make a meaningful
+              difference, ensuring Carol&apos;s spirit of compassion and
+              generosity lives on. Thank you for helping us keep her legacy
+              alive.
             </p>
             <Separator />
-            <h3 className="text-xl sm:text-2xl font-bold">
-              Recent Contributions
-            </h3>
-            {donationsList.map(({ name, amount }, index) => {
-              return (
-                <Fragment key={amount + name + index}>
-                  {index != 0 && <Separator key={name + amount + index} />}
-                  <div
-                    key={name + amount + index + index}
-                    className="text-base sm:text-lg flex justify-between"
-                  >
-                    <p>{name}</p>
-                    <p>${amount}</p>
-                  </div>
-                </Fragment>
-              )
-            })}
             <Button className="w-full sm:w-auto" asChild>
               <Link to="/donate">Contribute</Link>
             </Button>

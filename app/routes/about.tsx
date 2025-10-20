@@ -1,5 +1,6 @@
 import { Button } from '~/components/ui/button'
 import type { Route } from '../+types/root'
+import { sunFlowers } from '~/assets'
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -15,9 +16,16 @@ export default function About() {
   return (
     <section className="flex flex-col items-center pt-6 sm:pt-8 px-4">
       <article className="flex flex-col gap-6 sm:gap-8 w-full max-w-7xl text-base sm:text-lg bg-slate-50 rounded-md p-4 sm:p-8 shadow-md">
-        <h2 className="font-ephesis text-4xl sm:text-7xl text-maroon font-extrabold py-6 sm:py-12 text-center">
+        <h2 className="font-ephesis text-4xl sm:text-7xl text-maroon font-extrabold pt-6 sm:pt-12 text-center">
           Remembering Carol&apos;s Life
         </h2>
+        <div className="relative size-48 self-center">
+          <img
+            src={sunFlowers}
+            alt=""
+            className="object-contain size-full absolute"
+          />
+        </div>
 
         {/* Biography */}
         <p>

@@ -46,6 +46,7 @@ import {
   storeUserSession
 } from '~/utils/JWT.server'
 import { headerLilacImg } from '~/assets'
+import PageHeader from '~/components/PageHeader'
 
 async function checkCookiesForUserInfo(request: Request) {
   // See if user is stored in the session
@@ -362,18 +363,8 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
   // Render
   return (
     <>
-      <header className="h-[28rem] relative">
-        <img
-          src={headerLilacImg}
-          alt=""
-          className="w-full h-full object-cover object-top border-b-[1rem] border-maroon shadow-lg"
-        />
-        <div className="absolute inset-0 flex flex-col justify-center items-center bg-accent/70">
-          <h1 className="font-ephesis text-6xl font-extrabold text-sandy-brown text-shadow-md text-shadow-black">
-            Remember Carol with us
-          </h1>
-        </div>
-      </header>
+      <PageHeader pageTitle="Remember Carol with us" />
+
       <section className="flex flex-col items-center py-12 gap-12">
         <h2 className="font-ephesis text-5xl font-bold text-maroon">
           Through Pictures
