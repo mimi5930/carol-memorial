@@ -1,0 +1,185 @@
+{
+  "_PageHeader-DfYT0sHe.js": {
+    "file": "assets/PageHeader-DfYT0sHe.js",
+    "name": "PageHeader",
+    "imports": [
+      "_chunk-D4RADZKF-eXz8su7w.js"
+    ],
+    "assets": [
+      "assets/flower-border-C33_OeUX.png"
+    ]
+  },
+  "_button-BWfW8erP.js": {
+    "file": "assets/button-BWfW8erP.js",
+    "name": "button",
+    "imports": [
+      "_chunk-D4RADZKF-eXz8su7w.js",
+      "_index-DAgcc6WP.js"
+    ]
+  },
+  "_chunk-D4RADZKF-eXz8su7w.js": {
+    "file": "assets/chunk-D4RADZKF-eXz8su7w.js",
+    "name": "chunk-D4RADZKF"
+  },
+  "_index-Cu0MMeNO.js": {
+    "file": "assets/index-Cu0MMeNO.js",
+    "name": "index",
+    "imports": [
+      "_chunk-D4RADZKF-eXz8su7w.js"
+    ]
+  },
+  "_index-DAgcc6WP.js": {
+    "file": "assets/index-DAgcc6WP.js",
+    "name": "index",
+    "imports": [
+      "_chunk-D4RADZKF-eXz8su7w.js"
+    ]
+  },
+  "_separator-CiXE8n_1.js": {
+    "file": "assets/separator-CiXE8n_1.js",
+    "name": "separator",
+    "imports": [
+      "_chunk-D4RADZKF-eXz8su7w.js",
+      "_index-Cu0MMeNO.js",
+      "_index-DAgcc6WP.js"
+    ]
+  },
+  "_with-props-Cqo6cX_j.js": {
+    "file": "assets/with-props-Cqo6cX_j.js",
+    "name": "with-props",
+    "imports": [
+      "_chunk-D4RADZKF-eXz8su7w.js"
+    ]
+  },
+  "app/assets/carol-headshot.jpg": {
+    "file": "assets/carol-headshot-CXbSmLxt.jpg",
+    "src": "app/assets/carol-headshot.jpg"
+  },
+  "app/assets/flower-border.png": {
+    "file": "assets/flower-border-C33_OeUX.png",
+    "src": "app/assets/flower-border.png"
+  },
+  "app/assets/flower-heart.png": {
+    "file": "assets/flower-heart-e5AkazFS.png",
+    "src": "app/assets/flower-heart.png"
+  },
+  "app/assets/header-lilac.jpg": {
+    "file": "assets/header-lilac-DVVN03SF.jpg",
+    "src": "app/assets/header-lilac.jpg"
+  },
+  "app/assets/hydrangeas.jpg": {
+    "file": "assets/hydrangeas-CK-G4wEZ.jpg",
+    "src": "app/assets/hydrangeas.jpg"
+  },
+  "app/assets/purple-flowers.png": {
+    "file": "assets/purple-flowers-irAiiQdh.png",
+    "src": "app/assets/purple-flowers.png"
+  },
+  "app/assets/sunflowers.png": {
+    "file": "assets/sunflowers-DSL1fw4Z.png",
+    "src": "app/assets/sunflowers.png"
+  },
+  "app/root.tsx?__react-router-build-client-route": {
+    "file": "assets/root-DTv_12_9.js",
+    "name": "root",
+    "src": "app/root.tsx?__react-router-build-client-route",
+    "isEntry": true,
+    "imports": [
+      "_with-props-Cqo6cX_j.js",
+      "_chunk-D4RADZKF-eXz8su7w.js"
+    ],
+    "css": [
+      "assets/root-Dn2mT2Mk.css"
+    ]
+  },
+  "app/routes/about.tsx?__react-router-build-client-route": {
+    "file": "assets/about-DZvtII_m.js",
+    "name": "about",
+    "src": "app/routes/about.tsx?__react-router-build-client-route",
+    "isEntry": true,
+    "imports": [
+      "_with-props-Cqo6cX_j.js",
+      "_chunk-D4RADZKF-eXz8su7w.js",
+      "_button-BWfW8erP.js",
+      "_PageHeader-DfYT0sHe.js",
+      "_index-DAgcc6WP.js"
+    ],
+    "assets": [
+      "assets/sunflowers-DSL1fw4Z.png"
+    ]
+  },
+  "app/routes/donate.tsx?__react-router-build-client-route": {
+    "file": "assets/donate-DWiyxlEv.js",
+    "name": "donate",
+    "src": "app/routes/donate.tsx?__react-router-build-client-route",
+    "isEntry": true,
+    "imports": [
+      "_with-props-Cqo6cX_j.js",
+      "_chunk-D4RADZKF-eXz8su7w.js",
+      "_button-BWfW8erP.js",
+      "_separator-CiXE8n_1.js",
+      "_PageHeader-DfYT0sHe.js",
+      "_index-DAgcc6WP.js",
+      "_index-Cu0MMeNO.js"
+    ]
+  },
+  "app/routes/home.tsx?__react-router-build-client-route": {
+    "file": "assets/home-lVAaMUuk.js",
+    "name": "home",
+    "src": "app/routes/home.tsx?__react-router-build-client-route",
+    "isEntry": true,
+    "imports": [
+      "_with-props-Cqo6cX_j.js",
+      "_chunk-D4RADZKF-eXz8su7w.js",
+      "_button-BWfW8erP.js",
+      "_separator-CiXE8n_1.js",
+      "_index-DAgcc6WP.js",
+      "_index-Cu0MMeNO.js"
+    ],
+    "assets": [
+      "assets/header-lilac-DVVN03SF.jpg",
+      "assets/carol-headshot-CXbSmLxt.jpg",
+      "assets/hydrangeas-CK-G4wEZ.jpg",
+      "assets/flower-heart-e5AkazFS.png"
+    ]
+  },
+  "app/routes/layout.tsx?__react-router-build-client-route": {
+    "file": "assets/layout-CKOZ_erB.js",
+    "name": "layout",
+    "src": "app/routes/layout.tsx?__react-router-build-client-route",
+    "isEntry": true,
+    "imports": [
+      "_with-props-Cqo6cX_j.js",
+      "_chunk-D4RADZKF-eXz8su7w.js",
+      "_index-Cu0MMeNO.js",
+      "_index-DAgcc6WP.js",
+      "_separator-CiXE8n_1.js"
+    ]
+  },
+  "app/routes/memorial.tsx?__react-router-build-client-route": {
+    "file": "assets/memorial-mmr7bqkL.js",
+    "name": "memorial",
+    "src": "app/routes/memorial.tsx?__react-router-build-client-route",
+    "isEntry": true,
+    "imports": [
+      "_with-props-Cqo6cX_j.js",
+      "_chunk-D4RADZKF-eXz8su7w.js",
+      "_button-BWfW8erP.js",
+      "_PageHeader-DfYT0sHe.js",
+      "_index-DAgcc6WP.js"
+    ],
+    "assets": [
+      "assets/purple-flowers-irAiiQdh.png"
+    ]
+  },
+  "node_modules/@react-router/dev/dist/config/defaults/entry.client.tsx": {
+    "file": "assets/entry.client-DBs9nAXX.js",
+    "name": "entry.client",
+    "src": "node_modules/@react-router/dev/dist/config/defaults/entry.client.tsx",
+    "isEntry": true,
+    "imports": [
+      "_chunk-D4RADZKF-eXz8su7w.js",
+      "_index-Cu0MMeNO.js"
+    ]
+  }
+}
