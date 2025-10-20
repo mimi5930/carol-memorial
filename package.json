@@ -2,11 +2,14 @@
   "name": "carol-memorial",
   "private": true,
   "type": "module",
+  "homepage": "http://mimi5930.github.io/carol-memorial",
   "scripts": {
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
+    "typecheck": "react-router typegen && tsc",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
