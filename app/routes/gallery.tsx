@@ -363,7 +363,7 @@ export default function Gallery({ loaderData }: Route.ComponentProps) {
   // Render
   return (
     <>
-      <PageHeader pageTitle="Remember Carol with us" />
+      <PageHeader>Remember Carol with us</PageHeader>
 
       <section className="flex flex-col items-center py-12 gap-12">
         <h2 className="font-ephesis text-5xl font-bold text-maroon">

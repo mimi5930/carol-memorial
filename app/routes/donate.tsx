@@ -19,7 +19,7 @@ export default function Donations() {
   return (
     <>
       {/* Hero Section */}
-      <PageHeader pageTitle="Give Your Support" />
+      <PageHeader>Give Your Support</PageHeader>
 
       {/* Main Content */}
       <main className="py-16 flex justify-center">
